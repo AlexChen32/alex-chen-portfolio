@@ -1,0 +1,1578 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="陳勇學 Alex 作品集，聚焦自我介紹、軟體工程 AI 製作內容、技能工具、活動企劃與活動影像。">
+  <title>陳勇學 Alex | 作品集</title>
+  <style>
+    :root {
+      --bg: #fffdf9;
+      --paper: #f8f5ef;
+      --ink: #111827;
+      --muted: #687076;
+      --line: #e8dfd3;
+      --orange: #f59e0b;
+      --coral: #ef5b4d;
+      --teal: #10a8a0;
+      --blue: #2563eb;
+      --yellow: #ffd166;
+      --shadow: 0 18px 44px rgba(17, 24, 39, 0.10);
+      --soft-shadow: 0 12px 28px rgba(17, 24, 39, 0.08);
+      --max: 1180px;
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+    }
+
+    body {
+      margin: 0;
+      overflow-x: hidden;
+      background:
+        radial-gradient(circle at 7% 8%, rgba(255, 209, 102, 0.20), transparent 28%),
+        radial-gradient(circle at 92% 2%, rgba(16, 168, 160, 0.12), transparent 26%),
+        var(--bg);
+      color: var(--ink);
+      font-family: "Noto Sans TC", "Microsoft JhengHei", Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.75;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      background: rgba(255, 253, 249, 0.94);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(14px);
+    }
+
+    .nav {
+      width: min(var(--max), calc(100% - 48px));
+      min-height: 74px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 23px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .brand-mark {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: conic-gradient(from 180deg, var(--orange), var(--coral), var(--teal), var(--orange));
+      box-shadow: 0 8px 18px rgba(245, 158, 11, 0.25);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      font-size: 14px;
+      font-weight: 750;
+    }
+
+    .nav-links a {
+      position: relative;
+      padding: 22px 0;
+      white-space: nowrap;
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 16px;
+      height: 3px;
+      border-radius: 999px;
+      background: var(--orange);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 180ms ease;
+    }
+
+    .nav-links a:hover::after,
+    .nav-links a.active::after {
+      transform: scaleX(1);
+    }
+
+    .menu-btn {
+      display: none;
+      width: 42px;
+      height: 42px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      color: var(--ink);
+      cursor: pointer;
+    }
+
+    .icon {
+      display: inline-block;
+      width: 22px;
+      height: 22px;
+      flex: 0 0 auto;
+      vertical-align: middle;
+    }
+
+    .icon svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .hero {
+      position: relative;
+      width: min(var(--max), calc(100% - 48px));
+      margin: 0 auto;
+      padding: 78px 0 62px;
+      display: grid;
+      grid-template-columns: minmax(300px, 0.85fr) minmax(420px, 1fr);
+      gap: 74px;
+      align-items: center;
+    }
+
+    .hero::before,
+    .hero::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      pointer-events: none;
+    }
+
+    .hero::before {
+      width: 82px;
+      height: 82px;
+      right: 6%;
+      top: 40px;
+      border: 2px dashed rgba(16, 168, 160, 0.45);
+      animation: spinSlow 18s linear infinite;
+    }
+
+    .hero::after {
+      width: 52px;
+      height: 52px;
+      left: 1%;
+      bottom: 48px;
+      background: rgba(255, 209, 102, 0.45);
+      filter: blur(1px);
+      animation: float 4.5s ease-in-out infinite;
+    }
+
+    .hero-photo-wrap {
+      position: relative;
+      width: min(100%, 430px);
+      margin: 0 auto;
+    }
+
+    .hero-photo {
+      position: relative;
+      z-index: 1;
+      width: min(300px, 68vw);
+      aspect-ratio: 4 / 5;
+      margin: 0 auto;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 6px solid #fff;
+      background: #fff;
+      box-shadow: var(--shadow);
+    }
+
+    .hero-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: 50% 22%;
+    }
+
+    .floating-icon {
+      position: absolute;
+      z-index: 2;
+      display: grid;
+      place-items: center;
+      width: 62px;
+      height: 62px;
+      border-radius: 20px;
+      background: #fff;
+      border: 1px solid var(--line);
+      box-shadow: var(--soft-shadow);
+      color: var(--orange);
+      animation: float 4s ease-in-out infinite;
+    }
+
+    .floating-icon.one {
+      right: -12px;
+      top: 48px;
+      color: var(--teal);
+    }
+
+    .floating-icon.two {
+      left: -22px;
+      bottom: 56px;
+      color: var(--coral);
+      animation-delay: 0.7s;
+    }
+
+    .hero-copy h1 {
+      margin: 0 0 16px;
+      font-size: clamp(30px, 3.6vw, 46px);
+      line-height: 1.1;
+      font-weight: 950;
+      letter-spacing: 0;
+    }
+
+    .hero-rule {
+      display: grid;
+      grid-template-columns: 12px 1fr;
+      align-items: center;
+      gap: 16px;
+      margin: 0 0 22px;
+    }
+
+    .hero-rule span {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--orange);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    .hero-rule::after {
+      content: "";
+      height: 1px;
+      background: #cfc4b7;
+    }
+
+    .hero-subtitle {
+      margin: 0 0 8px;
+      font-size: clamp(15px, 1.5vw, 19px);
+      color: #202020;
+      font-weight: 650;
+    }
+
+    .hero-summary {
+      max-width: 560px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 32px;
+    }
+
+    .btn {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      min-height: 48px;
+      padding: 11px 18px;
+      border-radius: 999px;
+      border: 1px solid var(--ink);
+      background: var(--ink);
+      color: #fff;
+      font-size: 15px;
+      font-weight: 850;
+      cursor: pointer;
+      overflow: hidden;
+      transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease, color 180ms ease;
+    }
+
+    .btn::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.32), transparent);
+      transform: translateX(-110%);
+      transition: transform 420ms ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 14px 30px rgba(17, 24, 39, 0.16);
+    }
+
+    .btn:hover::after {
+      transform: translateX(110%);
+    }
+
+    .btn.secondary {
+      background: #fff;
+      color: var(--ink);
+    }
+
+    .btn.orange {
+      border-color: var(--orange);
+      background: var(--orange);
+    }
+
+    .btn.teal {
+      border-color: var(--teal);
+      background: var(--teal);
+    }
+
+    .section {
+      border-top: 1px solid var(--line);
+      padding: 72px 0;
+    }
+
+    .section.alt {
+      background: var(--paper);
+    }
+
+    .inner {
+      width: min(var(--max), calc(100% - 48px));
+      margin: 0 auto;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 34px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: clamp(32px, 4vw, 52px);
+      line-height: 1.12;
+      font-weight: 950;
+      letter-spacing: 0;
+    }
+
+    .section-head p {
+      max-width: 570px;
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-top: 30px;
+    }
+
+    .stat {
+      min-height: 140px;
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      box-shadow: 0 10px 24px rgba(17, 24, 39, 0.05);
+      transition: transform 180ms ease, box-shadow 180ms ease;
+    }
+
+    .stat:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--soft-shadow);
+    }
+
+    .stat strong {
+      display: block;
+      color: var(--orange);
+      font-size: 34px;
+      line-height: 1.1;
+      margin-bottom: 8px;
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .event-stats {
+      margin: 0 0 34px;
+    }
+
+    .event-stats-heading {
+      margin: 0 0 14px;
+      color: var(--ink);
+      font-size: 18px;
+      font-weight: 850;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 0.78fr 1fr;
+      gap: 48px;
+      align-items: start;
+    }
+
+    .about-card {
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      padding: 0;
+      box-shadow: none;
+    }
+
+    .about-card h3,
+    .timeline h3 {
+      margin: 0;
+      padding-bottom: 16px;
+      border-bottom: 1px dashed var(--line);
+      font-size: 24px;
+      line-height: 1.3;
+    }
+
+    .about-card p {
+      margin: 0 0 16px;
+      color: var(--muted);
+    }
+
+    .about-list {
+      display: grid;
+      gap: 0;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .about-list li {
+      padding: 18px 0;
+      border-bottom: 1px dashed var(--line);
+      color: var(--muted);
+    }
+
+    .about-list strong {
+      color: var(--ink);
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 0;
+    }
+
+    .time-item {
+      display: grid;
+      grid-template-columns: 116px 1fr;
+      gap: 22px;
+      padding: 18px 0;
+      border-bottom: 1px dashed var(--line);
+    }
+
+    .time-item time {
+      color: var(--coral);
+      font-weight: 900;
+      line-height: 1.4;
+    }
+
+    .time-item h4 {
+      margin: 0 0 6px;
+      font-size: 20px;
+    }
+
+    .time-item p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 22px;
+      align-items: start;
+    }
+
+    .project-card {
+      position: relative;
+      display: grid;
+      grid-template-columns: 170px 1fr;
+      gap: 18px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      box-shadow: 0 9px 22px rgba(17, 24, 39, 0.05);
+      transition: transform 180ms ease, box-shadow 180ms ease;
+    }
+
+    .project-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 34px rgba(17, 24, 39, 0.12);
+    }
+
+    .project-card.wide {
+      grid-column: span 2;
+      grid-template-columns: 0.9fr 1fr;
+    }
+
+    .year-badge {
+      position: absolute;
+      z-index: 2;
+      left: 12px;
+      top: 12px;
+      min-width: 54px;
+      min-height: 54px;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      background: var(--teal);
+      color: #fff;
+      border: 4px solid #fff;
+      font-size: 15px;
+      font-weight: 950;
+      box-shadow: 0 10px 22px rgba(16, 168, 160, 0.22);
+    }
+
+    .events .year-badge {
+      background: var(--coral);
+      box-shadow: 0 10px 22px rgba(239, 91, 77, 0.24);
+    }
+
+    .card-image {
+      min-height: 158px;
+      border: 0;
+      padding: 0;
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: var(--paper);
+      cursor: zoom-in;
+    }
+
+    .project-card.wide .card-image {
+      min-height: 300px;
+    }
+
+    .card-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 220ms ease;
+    }
+
+    .project-card:hover .card-image img {
+      transform: scale(1.04);
+    }
+
+    .live-cover {
+      display: grid;
+      place-content: center;
+      gap: 6px;
+      text-align: center;
+      padding: 18px;
+      background: linear-gradient(135deg, #111827, #1f2a44 55%, #10a8a0);
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .live-cover .live-tag {
+      font-size: 12px;
+      font-weight: 850;
+      letter-spacing: 0.14em;
+      color: #6ee7b7;
+    }
+
+    .live-cover .live-title {
+      font-size: clamp(28px, 4vw, 38px);
+      font-weight: 950;
+      line-height: 1.1;
+    }
+
+    .live-cover .live-url {
+      font-size: 14px;
+      font-weight: 800;
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    .project-card:hover .live-cover {
+      filter: brightness(1.06);
+    }
+
+    .shots {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .shots figure {
+      margin: 0;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: #fff;
+      box-shadow: 0 9px 22px rgba(17, 24, 39, 0.05);
+    }
+
+    .shots button {
+      display: block;
+      width: 100%;
+      border: 0;
+      padding: 0;
+      background: var(--paper);
+      cursor: zoom-in;
+    }
+
+    .shots img {
+      width: 100%;
+      height: auto;
+      display: block;
+      transition: transform 220ms ease;
+    }
+
+    .shots figure:hover img {
+      transform: scale(1.03);
+    }
+
+    .shots figcaption {
+      padding: 9px 12px;
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+    }
+
+    @media (max-width: 760px) {
+      .shots { grid-template-columns: 1fr; }
+    }
+
+    .card-copy h3 {
+      margin: 0 0 4px;
+      font-size: 22px;
+      line-height: 1.28;
+    }
+
+    .role {
+      margin: 0 0 10px;
+      color: var(--muted);
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .action-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      color: #3f4a54;
+      font-size: 14px;
+    }
+
+    .action-list li {
+      position: relative;
+      padding-left: 24px;
+      margin: 7px 0;
+    }
+
+    .action-list li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 9px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--orange);
+      box-shadow: inset 0 0 0 3px #fff, 0 0 0 1px rgba(245, 158, 11, 0.45);
+    }
+
+    .result-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .mini-stat {
+      min-width: 88px;
+      padding: 8px 10px;
+      border-radius: var(--radius);
+      background: #e9f8f6;
+      color: #087f78;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 850;
+    }
+
+    .events .mini-stat {
+      background: #fff4e1;
+      color: #a35705;
+    }
+
+    .software-band {
+      border: 1px solid rgba(16, 168, 160, 0.20);
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, rgba(16, 168, 160, 0.08), rgba(37, 99, 235, 0.08));
+      padding: 20px;
+      margin-bottom: 22px;
+    }
+
+    .subsection-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 16px;
+      font-size: 25px;
+      line-height: 1.25;
+      font-weight: 950;
+      color: var(--teal);
+    }
+
+    .subsection-title.workflow {
+      color: var(--blue);
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+
+    .skill-card {
+      min-height: 240px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      padding: 24px;
+      box-shadow: 0 10px 24px rgba(17, 24, 39, 0.05);
+      transition: transform 180ms ease, box-shadow 180ms ease;
+    }
+
+    .skill-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--soft-shadow);
+    }
+
+    .skill-card h3 {
+      margin: 0 0 14px;
+      font-size: 22px;
+    }
+
+    .skill-card ul {
+      margin: 0;
+      padding-left: 20px;
+      color: var(--muted);
+    }
+
+    .skill-card li {
+      margin-bottom: 8px;
+    }
+
+    .event-timeline {
+      display: grid;
+      gap: 18px;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr 1fr;
+      gap: 14px;
+      align-items: stretch;
+    }
+
+    .gallery button {
+      border: 0;
+      padding: 0;
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: #ddd;
+      cursor: zoom-in;
+      min-height: 240px;
+    }
+
+    .gallery button:nth-child(1) {
+      grid-row: span 2;
+      min-height: 494px;
+    }
+
+    .gallery img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 220ms ease, filter 220ms ease;
+    }
+
+    .gallery button:hover img {
+      transform: scale(1.04);
+      filter: saturate(1.08);
+    }
+
+    .contact-panel {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 56px;
+      align-items: center;
+      max-width: 960px;
+      margin: 0 auto;
+      text-align: center;
+      border: 0;
+      border-radius: 0;
+      padding: 34px;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    .contact-panel > div:first-child {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100%;
+    }
+
+    .contact-panel h2 {
+      margin: 0;
+      font-size: clamp(32px, 4vw, 52px);
+      line-height: 1.15;
+      letter-spacing: 0;
+    }
+
+    .contact-panel p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .contact-facts {
+      display: grid;
+      gap: 14px;
+      align-content: center;
+      width: min(520px, 100%);
+      margin: 0 auto;
+    }
+
+    .fact {
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: 6px;
+      padding: 16px 0;
+      border-top: 1px solid var(--line);
+      text-align: center;
+    }
+
+    .fact strong {
+      display: inline;
+      margin-bottom: 0;
+      color: var(--ink);
+    }
+
+    .fact strong::after {
+      content: ":";
+    }
+
+    .fact span,
+    .fact a {
+      display: inline;
+      color: var(--muted);
+    }
+
+    .site-footer {
+      border-top: 1px solid var(--line);
+      padding: 28px 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .footer-inner {
+      width: min(var(--max), calc(100% - 48px));
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: rgba(0, 0, 0, 0.88);
+    }
+
+    .lightbox.on {
+      display: flex;
+    }
+
+    .lightbox img {
+      max-width: min(1100px, 94vw);
+      max-height: 88vh;
+      border-radius: var(--radius);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.34);
+    }
+
+    .lightbox button {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      width: 44px;
+      height: 44px;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+      cursor: pointer;
+      font-size: 24px;
+      line-height: 1;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.45); opacity: 0.62; }
+    }
+
+    @keyframes spinSlow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation: none !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    @media (max-width: 1080px) {
+      .project-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .project-card.wide {
+        grid-column: auto;
+        grid-template-columns: 170px 1fr;
+      }
+    }
+
+    @media (max-width: 980px) {
+      .hero {
+        grid-template-columns: 1fr;
+        gap: 46px;
+        padding-top: 50px;
+      }
+
+      .hero-copy {
+        text-align: center;
+      }
+
+      .hero-rule {
+        max-width: 620px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .hero-summary {
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .hero-actions {
+        justify-content: center;
+      }
+
+      .stats,
+      .skills-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .about-grid,
+      .contact-panel {
+        grid-template-columns: 1fr;
+      }
+
+      .gallery {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .gallery button:nth-child(1) {
+        grid-row: auto;
+        grid-column: span 2;
+        min-height: 360px;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .nav {
+        width: min(100% - 28px, var(--max));
+        min-height: 64px;
+      }
+
+      .brand {
+        font-size: 18px;
+      }
+
+      .brand-mark {
+        width: 24px;
+        height: 24px;
+      }
+
+      .menu-btn {
+        display: inline-grid;
+        place-items: center;
+      }
+
+      .nav-links {
+        position: absolute;
+        left: 14px;
+        right: 14px;
+        top: 68px;
+        display: none;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+        padding: 10px;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: #fff;
+        box-shadow: var(--soft-shadow);
+      }
+
+      .nav-links.open {
+        display: flex;
+      }
+
+      .nav-links a {
+        padding: 12px 10px;
+      }
+
+      .nav-links a::after {
+        display: none;
+      }
+
+      .hero,
+      .inner,
+      .footer-inner {
+        width: min(100% - 28px, var(--max));
+      }
+
+      .hero {
+        padding: 42px 0 44px;
+      }
+
+      .hero::before,
+      .hero::after,
+      .floating-icon {
+        display: none;
+      }
+
+      .hero-photo-wrap {
+        width: min(100%, 330px);
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .section {
+        padding: 54px 0;
+      }
+
+      .section-head {
+        display: block;
+      }
+
+      .section-head p {
+        margin-top: 12px;
+      }
+
+      .stats,
+      .skills-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .project-card,
+      .project-card.wide {
+        grid-template-columns: 1fr;
+      }
+
+      .project-card.wide .card-image,
+      .card-image {
+        min-height: 220px;
+      }
+
+      .time-item {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+
+      .gallery {
+        grid-template-columns: 1fr;
+      }
+
+      .gallery button,
+      .gallery button:nth-child(1) {
+        grid-column: auto;
+        min-height: 250px;
+      }
+
+      .contact-panel {
+        padding: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav" aria-label="主要導覽">
+      <a class="brand" href="#home"><span class="brand-mark" aria-hidden="true"></span>陳勇學 Alex</a>
+      <button class="menu-btn" type="button" aria-label="開啟選單" aria-expanded="false">☰</button>
+      <div class="nav-links" id="nav-links">
+        <a class="active" href="#home">自我介紹</a>
+        <a href="#about">關於我</a>
+        <a href="#software">軟體工程</a>
+        <a href="#skills">技能工具</a>
+        <a href="#events">活動企劃</a>
+        <a href="#gallery">活動影像</a>
+        <a href="#contact">聯絡資料</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="hero-photo-wrap">
+        <div class="hero-photo">
+          <img src="images/profile_headshot.png" alt="陳勇學 Alex 大頭照">
+        </div>
+      </div>
+      <div class="hero-copy">
+        <h1>嗨，我是 Alex</h1>
+        <div class="hero-rule"><span></span></div>
+        <p class="hero-subtitle">AI 製作內容 | Workflow 自動化 | 全端開發 | 政府標案執行</p>
+        <p class="hero-summary">以「軟體工程・AI 協作」與「活動企劃・政府標案」兩大主軸，呈現網站開發、Workflow 自動化與專案執行的實作經驗。</p>
+        <div class="hero-actions">
+          <a class="btn orange" href="#software">
+            瀏覽軟體作品
+            <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></span>
+          </a>
+          <a class="btn secondary" href="#events">瀏覽活動經驗</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section alt" id="about">
+      <div class="inner">
+        <div class="section-head">
+          <h2>關於我</h2>
+        </div>
+        <div class="about-grid">
+          <article class="about-card">
+            <h3>個人定位</h3>
+            <ul class="about-list">
+              <li><strong>個人資訊</strong>陳勇學，現居桃園市。具備專案管理、AI自動化應用、政府標案執行、活動企劃與品牌行銷。</li>
+              <li><strong>過往經歷</strong>專案企劃 / 活動企劃 / 行銷企劃 / 品牌行銷</li>
+              <li><strong>專案執行</strong>桃園安東青創基地 113、114 年政府計畫</li>
+              <li><strong>技術延伸</strong>網站製作 / Workflow 自動化 / AI 工具應用</li>
+            </ul>
+          </article>
+          <div class="timeline">
+            <h3>工作經歷</h3>
+            <article class="time-item">
+              <time>2026/04<br>至今</time>
+              <div>
+                <h4>自主AI應用與全端開發</h4>
+                <p>投入 AI 領域：自學並自建4套n8n自動化工作流，以及AI協作獨立開發、上線 WeCosplay 全端電商平台。</p>
+              </div>
+            </article>
+            <article class="time-item">
+              <time>2024/01<br>2026/03</time>
+              <div>
+                <h4>聯經數位股份有限公司 | 企劃專員</h4>
+                <p>負責桃園安東青創基地政府計畫：計畫書撰寫、KPI 追蹤、活動規劃、對外協調、成果報告與核銷資料整理。</p>
+              </div>
+            </article>
+            <article class="time-item">
+              <time>2023/10<br>2023/12</time>
+              <div>
+                <h4>領濤新創股份有限公司 | 實習管理師</h4>
+                <p>基地日常營運、行政文件與資料整理、表單彙整與對外窗口支援。</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="software">
+      <div class="inner">
+        <div class="section-head">
+          <h2>軟體工程 / AI 製作內容</h2>
+        </div>
+
+        <div class="software-band">
+          <h3 class="subsection-title">
+            <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8"/><path d="M12 16v4"/></svg></span>
+            網站製作
+          </h3>
+          <div class="project-grid">
+            <article class="project-card wide">
+              <span class="year-badge">2026</span>
+              <button class="card-image" type="button" aria-label="放大 WeCosplay 首頁截圖"><img src="images/wecosplay_home.png" alt="WeCosplay 平台首頁" data-lightbox></button>
+              <div class="card-copy">
+                <h3>WeCosplay｜全端電商平台（AI 協作）</h3>
+                <p class="role">獨立開發・需求／規格／品管／部署一手包辦</p>
+                <ul class="action-list">
+                  <li>無工程背景，以 AI 協作從 0 獨立設計並上線：Next.js · TypeScript · MongoDB · Vercel。</li>
+                  <li>90+ API 路由、13 後台管理模組、3 語系（繁中／English／日本語）。</li>
+                  <li>完整訂單狀態機、CI/CD 自動部署。</li>
+                </ul>
+                <div class="result-row">
+                  <span class="mini-stat">90+ API</span>
+                  <span class="mini-stat">13 模組</span>
+                  <span class="mini-stat">CI/CD</span>
+                  <span class="mini-stat">3 語系</span>
+                </div>
+                <p style="margin:14px 0 0;"><a href="https://we-cosplay.com" target="_blank" rel="noopener" style="color:var(--teal);font-weight:850;">● 線上實際運作：we-cosplay.com ↗</a></p>
+              </div>
+            </article>
+          </div>
+          <div class="shots">
+            <figure>
+              <button type="button" aria-label="放大 WeCosplay 後台管理截圖"><img src="images/wecosplay_admin.png" alt="WeCosplay 後台管理儀表板" data-lightbox></button>
+              <figcaption>後台管理儀表板（會員／商品／訂單／優惠券／客服）</figcaption>
+            </figure>
+            <figure>
+              <button type="button" aria-label="放大 WeCosplay 結帳流程截圖"><img src="images/wecosplay_checkout.png" alt="WeCosplay 結帳流程" data-lightbox></button>
+              <figcaption>結帳流程（購物車 → 結帳 → 完成）</figcaption>
+            </figure>
+          </div>
+        </div>
+
+        <div class="software-band">
+          <h3 class="subsection-title workflow">
+            <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m13 2-8 12h7l-1 8 8-12h-7z"/></svg></span>
+            Workflow 自動化
+          </h3>
+          <div class="project-grid">
+            <article class="project-card wide">
+              <span class="year-badge">2026</span>
+              <button class="card-image" type="button" aria-label="放大 n8n 工作流圖片"><img src="images/ai_social_analysis.png" alt="n8n + AI 自動化工作流（含 FB 社群分析週報）" data-lightbox></button>
+              <div class="card-copy">
+                <h3>n8n 工作流自動化</h3>
+                <p class="role">Workflow 設計 / AI 串接 / 流程優化</p>
+                <ul class="action-list">
+                  <li>自建 4 套 n8n 工作流：資料蒐集與結構化、FB 社群爬蟲＋AI 情緒分析週報、Telegram AI Agent 等。</li>
+                  <li>整合 Claude / OpenAI / Gemini API、HTTP Request、Webhook 與 Google 服務。</li>
+                  <li>FB 社群週報每週自動產出，省去 2–3 小時人工整理；整體減少約 30% 重複作業工時。</li>
+                </ul>
+                <div class="result-row">
+                  <span class="mini-stat">4 支 Workflow</span>
+                  <span class="mini-stat">30%+ 工時</span>
+                  <span class="mini-stat">自動週報</span>
+                </div>
+              </div>
+            </article>
+
+            <article class="project-card wide">
+              <span class="year-badge">2026</span>
+              <button class="card-image" type="button" aria-label="放大政府標案 AI Skill 自動化地圖"><img src="images/govtender_ai_skill_map.png" alt="政府標案生命週期 AI Skill 自動化地圖" data-lightbox></button>
+              <div class="card-copy">
+                <h3>政府標案 AI Skill 自動化地圖</h3>
+                <p class="role">流程設計 / AI 規則框架 / 文件自動化</p>
+                <ul class="action-list">
+                  <li>將政府標案從投標、執行到結案的完整流程，拆解成可被 AI 自動化的節點。</li>
+                  <li>為每個環節設計 AI Skill 規則與標準產出（計畫書、KPI 表、會議紀錄、結案報告）。</li>
+                  <li>把過往標案經驗系統化成可複用的 AI 工作方法。</li>
+                </ul>
+                <div class="result-row">
+                  <span class="mini-stat">流程拆解</span>
+                  <span class="mini-stat">AI Skill</span>
+                  <span class="mini-stat">文件自動化</span>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section alt" id="skills">
+      <div class="inner">
+        <div class="section-head">
+          <h2>技能工具</h2>
+        </div>
+        <div class="skills-grid">
+          <article class="skill-card">
+            <h3>企劃行政</h3>
+            <ul>
+              <li>政府標案執行</li>
+              <li>計畫書撰寫</li>
+              <li>KPI 設計與追蹤</li>
+              <li>成果報告與核銷整理</li>
+              <li>SOP 建立</li>
+            </ul>
+          </article>
+          <article class="skill-card">
+            <h3>行銷活動</h3>
+            <ul>
+              <li>Accupass 平台經營</li>
+              <li>活動企劃與現場執行</li>
+              <li>社群內容規劃</li>
+              <li>異業合作</li>
+              <li>展覽規劃</li>
+            </ul>
+          </article>
+          <article class="skill-card">
+            <h3>網站製作</h3>
+            <ul>
+              <li>HTML / CSS / JavaScript</li>
+              <li>RWD 響應式版面</li>
+              <li>Next.js</li>
+              <li>Vercel 部署</li>
+              <li>MongoDB</li>
+            </ul>
+          </article>
+          <article class="skill-card">
+            <h3>AI 自動化</h3>
+            <ul>
+              <li>Claude</li>
+              <li>Google AI Studio</li>
+              <li>n8n</li>
+              <li>Telegram Bot API</li>
+              <li>Discord webhook</li>
+              <li>Prompt Engineering</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section events" id="events">
+      <div class="inner">
+        <div class="section-head">
+          <h2>活動企劃</h2>
+        </div>
+        <p class="event-stats-heading">安東青創基地亮點績效</p>
+        <div class="stats event-stats">
+          <div class="stat"><strong>1,690%</strong><span>Accupass 追蹤成長率</span></div>
+          <div class="stat"><strong>10,000+</strong><span>活動與基地服務人次</span></div>
+          <div class="stat"><strong>95%+</strong><span>活動滿意度</span></div>
+          <div class="stat"><strong>20+</strong><span>年度活動場次</span></div>
+        </div>
+        <div class="event-timeline">
+          <article class="project-card wide">
+            <span class="year-badge">2024</span>
+            <button class="card-image" type="button" aria-label="放大桃園安東青創基地 113 年圖片"><img src="images/exchange_cross_base.jpg" alt="桃園安東青創基地 113 年跨基地交流活動" data-lightbox></button>
+            <div class="card-copy">
+              <h3>桃園安東青創基地 113 年計畫</h3>
+              <p class="role">活動企劃 / 政府標案執行</p>
+              <ul class="action-list">
+                <li>協助政府計畫 KPI 追蹤、成果報告與核銷資料整理。</li>
+                <li>規劃課程、參訪、交流活動與基地體驗內容。</li>
+                <li>協助進駐新創團隊進行資源媒合與活動曝光。</li>
+              </ul>
+              <div class="result-row">
+                <span class="mini-stat">KPI 達標</span>
+                <span class="mini-stat">10+ 團隊</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="project-card wide">
+            <span class="year-badge">2025</span>
+            <button class="card-image" type="button" aria-label="放大桃園安東青創基地 114 年圖片"><img src="images/08.jpg" alt="桃園安東青創基地 114 年智慧城市展合照" data-lightbox></button>
+            <div class="card-copy">
+              <h3>桃園安東青創基地 114 年計畫</h3>
+              <p class="role">活動企劃 / 專案推進 / 品牌曝光</p>
+              <ul class="action-list">
+                <li>延續基地營運，擴大活動量體、平台經營與新創曝光。</li>
+                <li>整合活動規劃、合作單位溝通、成果資料與現場執行。</li>
+                <li>協助活動滿意度、服務人次與品牌聲量達成年度成果。</li>
+              </ul>
+              <div class="result-row">
+                <span class="mini-stat">20+ 場活動</span>
+                <span class="mini-stat">10,000+ 人次</span>
+                <span class="mini-stat">95%+ 滿意度</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="project-card wide">
+            <span class="year-badge">2025</span>
+            <button class="card-image" type="button" aria-label="放大 Accupass 品牌行銷圖片" style="min-height:240px;background:#fff"><img src="images/accupass_xr_poster.png" alt="Accupass 品牌行銷活動海報" data-lightbox style="object-fit:contain"></button>
+            <div class="card-copy">
+              <h3>Accupass 品牌行銷</h3>
+              <p class="role">活動行銷 / 內容規劃 / 平台經營</p>
+              <ul class="action-list">
+                <li>以活動內容、異業合作與社群曝光提升活動參與量。</li>
+                <li>規劃品牌與活動文案，提升平台追蹤數與品牌能見度。</li>
+                <li>把活動成果轉成可追蹤的行銷指標。</li>
+              </ul>
+              <div class="result-row">
+                <span class="mini-stat">60 -> 1,100+ 人</span>
+                <span class="mini-stat">1,690%</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="project-card wide">
+            <span class="year-badge">2025</span>
+            <button class="card-image" type="button" aria-label="放大智慧城市展圖片"><img src="images\LINE_ALBUM_2025智慧城市展_251215_1.jpg" alt="2025 智慧城市展與 Tech Day 活動照片" data-lightbox></button>
+            <div class="card-copy">
+              <h3>2025 智慧城市展</h3>
+              <p class="role">展位規劃 / 專案統籌</p>
+              <ul class="action-list">
+                <li>統籌展位規劃、主視覺、講者安排與中英文導覽手冊。</li>
+                <li>協助基地與進駐新創在大型展會中完成品牌展示。</li>
+                <li>整合媒體與合作資源，擴大展會曝光。</li>
+              </ul>
+              <div class="result-row">
+                <span class="mini-stat">展位規劃</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section alt" id="gallery" aria-labelledby="gallery-title">
+      <div class="inner">
+        <div class="section-head">
+          <h2 id="gallery-title">活動影像</h2>
+        </div>
+        <div class="gallery">
+          <button type="button" aria-label="放大活動照片"><img src="images/base_experience_1.jpg" alt="基地活動導覽" data-lightbox></button>
+          <button type="button" aria-label="放大活動照片"><img src="images/visit_yilan.jpg" alt="宜蘭跨區參訪" data-lightbox></button>
+          <button type="button" aria-label="放大活動照片"><img src="images/course_startup_lawyer.jpg" alt="創業通識課程" data-lightbox></button>
+          <button type="button" aria-label="放大活動照片"><img src="images/expo_taoyuan_startup.jpg" alt="桃園新創展會" data-lightbox></button>
+          <button type="button" aria-label="放大活動照片"><img src="images/course_community_lecture.jpg" alt="社大公民週講座" data-lightbox></button>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="contact">
+      <div class="inner">
+        <div class="contact-panel">
+          <div>
+            <h2>聯絡資料</h2>
+          </div>
+          <div class="contact-facts">
+              <div class="fact">
+              <strong>姓名</strong>
+              <span>陳勇學</span>
+            </div>
+            <div class="fact">
+              <strong>Email</strong>
+              <a href="mailto:d3332565@gmail.com">d3332565@gmail.com</a>
+            </div>
+            <div class="fact">
+              <strong>所在地</strong>
+              <span>桃園市桃園區</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span>© 2026 陳勇學 Alex</span>
+      <span>陳勇學 個人作品集</span>
+    </div>
+  </footer>
+
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <button type="button" id="lightbox-close" aria-label="關閉圖片">×</button>
+    <img id="lightbox-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="">
+  </div>
+
+  <script>
+    const menuBtn = document.querySelector(".menu-btn");
+    const navLinks = document.querySelector("#nav-links");
+    const lightbox = document.querySelector("#lightbox");
+    const lightboxImg = document.querySelector("#lightbox-img");
+    const lightboxClose = document.querySelector("#lightbox-close");
+    const emptyImage = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+
+    menuBtn.addEventListener("click", () => {
+      const open = navLinks.classList.toggle("open");
+      menuBtn.setAttribute("aria-expanded", String(open));
+    });
+
+    navLinks.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", () => {
+        navLinks.classList.remove("open");
+        menuBtn.setAttribute("aria-expanded", "false");
+      });
+    });
+
+    document.querySelectorAll("[data-lightbox]").forEach((image) => {
+      const trigger = image.closest("button") || image;
+      trigger.addEventListener("click", () => {
+        lightboxImg.src = image.currentSrc || image.src;
+        lightboxImg.alt = image.alt || "作品集圖片";
+        lightbox.classList.add("on");
+        lightbox.setAttribute("aria-hidden", "false");
+      });
+    });
+
+    function closeLightbox() {
+      lightbox.classList.remove("on");
+      lightbox.setAttribute("aria-hidden", "true");
+      lightboxImg.src = emptyImage;
+    }
+
+    lightboxClose.addEventListener("click", closeLightbox);
+    lightbox.addEventListener("click", (event) => {
+      if (event.target === lightbox) closeLightbox();
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") closeLightbox();
+    });
+
+    const sections = [...document.querySelectorAll("main section[id]")];
+    const navItems = [...document.querySelectorAll(".nav-links a")];
+    const observer = new IntersectionObserver((entries) => {
+      const visible = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+      if (!visible) return;
+      navItems.forEach((item) => {
+        item.classList.toggle("active", item.getAttribute("href") === `#${visible.target.id}`);
+      });
+    }, { threshold: [0.35, 0.6] });
+
+    sections.forEach((section) => observer.observe(section));
+  </script>
+</body>
+</html>
