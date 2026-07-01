@@ -21,6 +21,7 @@
       --soft-shadow: 0 12px 28px rgba(17, 24, 39, 0.08);
       --max: 1180px;
       --radius: 8px;
+      --header-height: 74px;
     }
 
     * {
@@ -30,10 +31,12 @@
     html {
       scroll-behavior: smooth;
       overflow-x: hidden;
+      scroll-padding-top: calc(var(--header-height) + 18px);
     }
 
     body {
       margin: 0;
+      padding-top: var(--header-height);
       overflow-x: hidden;
       background:
         radial-gradient(circle at 7% 8%, rgba(255, 209, 102, 0.20), transparent 28%),
@@ -60,22 +63,36 @@
     }
 
     .site-header {
-      position: sticky;
+      position: fixed;
       top: 0;
-      z-index: 30;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      width: 100%;
       background: rgba(255, 253, 249, 0.94);
       border-bottom: 1px solid var(--line);
       backdrop-filter: blur(14px);
+      transition: background 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+    }
+
+    .site-header.is-scrolled {
+      background: rgba(255, 253, 249, 0.98);
+      border-bottom-color: rgba(232, 223, 211, 0.88);
+      box-shadow: 0 10px 28px rgba(17, 24, 39, 0.08);
     }
 
     .nav {
       width: min(var(--max), calc(100% - 48px));
-      min-height: 74px;
+      min-height: var(--header-height);
       margin: 0 auto;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 24px;
+    }
+
+    [id] {
+      scroll-margin-top: calc(var(--header-height) + 18px);
     }
 
     .brand {
@@ -294,6 +311,56 @@
       flex-wrap: wrap;
       gap: 14px;
       margin-top: 32px;
+    }
+
+    .persona {
+      margin-top: 26px;
+      padding-top: 20px;
+      border-top: 1px dashed var(--line);
+    }
+    .persona-q {
+      display: block;
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--muted);
+      margin-bottom: 10px;
+      letter-spacing: .03em;
+    }
+    .persona-btns {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .persona-btn {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 800;
+      padding: 9px 16px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: transform .15s, box-shadow .15s, border-color .15s, background .15s, color .15s;
+    }
+    .persona-btn:hover {
+      transform: translateY(-2px);
+      border-color: var(--teal);
+      box-shadow: var(--soft-shadow);
+    }
+    .persona-btn.on {
+      background: var(--teal);
+      border-color: var(--teal);
+      color: #fff;
+    }
+    .persona-hint {
+      margin: 12px 0 0;
+      min-height: 20px;
+      font-size: 13px;
+      color: var(--teal);
+      font-weight: 700;
+    }
+    @media (max-width: 980px) {
+      .persona-btns { justify-content: center; }
     }
 
     .btn {
@@ -1033,9 +1100,12 @@
     }
 
     @media (max-width: 760px) {
+      :root {
+        --header-height: 64px;
+      }
+
       .nav {
         width: min(100% - 28px, var(--max));
-        min-height: 64px;
       }
 
       .brand {
@@ -1056,7 +1126,7 @@
         position: absolute;
         left: 14px;
         right: 14px;
-        top: 68px;
+        top: calc(var(--header-height) + 8px);
         display: none;
         flex-direction: column;
         align-items: stretch;
@@ -1185,6 +1255,15 @@
             <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></span>
           </a>
           <a class="btn secondary" href="#events">瀏覽活動經驗</a>
+        </div>
+        <div class="persona" id="persona">
+          <span class="persona-q">你是？我帶你看重點 👇</span>
+          <div class="persona-btns">
+            <button type="button" class="persona-btn" data-target="about" data-msg="給 HR／用人主管：先看我的工作經歷、定位與可立即上手的能力。">👔 HR／用人主管</button>
+            <button type="button" class="persona-btn" data-target="software" data-msg="給技術主管：WeCosplay 全端開發、n8n 自動化與技術細節都在這裡。">💻 技術主管</button>
+            <button type="button" class="persona-btn" data-target="events" data-msg="想看實際成果：政府標案、Accupass 1,690%、智慧城市展都在這。">🎯 想看成果</button>
+          </div>
+          <p class="persona-hint" id="personaHint"></p>
         </div>
       </div>
     </section>
@@ -1318,6 +1397,31 @@
                   <span class="mini-stat">AI Skill</span>
                   <span class="mini-stat">文件自動化</span>
                 </div>
+              </div>
+            </article>
+
+            <article class="project-card wide">
+              <span class="year-badge">2026</span>
+              <button class="card-image" type="button" aria-label="放大 AI 互審協作流程圖"><img src="images/ai_peer_review.png" alt="AI 多模型互審半自動協作流程圖" data-lightbox></button>
+              <div class="card-copy">
+                <h3>AI 多模型互審協作流程（半自動）</h3>
+                <p class="role">多 AI 交叉審查 / 品質把關 / 流程設計</p>
+                <ul class="action-list">
+                  <li>設計「多個 AI 互相審查」的協作流程（Claude Code × Codex × Cowork 交叉互審），讓不同模型檢查彼此產出，避免單一 LLM 忽略盲點與漏洞。</li>
+                  <li>以 SKILL 檔案架構規範協作：AGENTS.md、第二意見協定、review-log、decision-log、task-board，並將風險分為 P0–P3。</li>
+                  <li>目前採半自動（非 API 串接、以多個付費版 AI Pro 介面協作）：省 token、可控作業時間、能掌握每步審查內容；未來可接 API／Bot 完整自動化。</li>
+                </ul>
+                <div class="result-row">
+                  <span class="mini-stat">多模型互審</span>
+                  <span class="mini-stat">品質把關</span>
+                  <span class="mini-stat">SKILL 架構</span>
+                </div>
+                <figure style="margin:14px 0 0">
+                  <button type="button" aria-label="放大 AI 互審 Slack 執行示意" style="display:block;width:100%;max-width:360px;border:1px solid var(--line);border-radius:8px;overflow:hidden;padding:0;background:#fff;cursor:zoom-in">
+                    <img src="images/ai_peer_review_slack.png" alt="AI 互審 Slack 執行示意" data-lightbox style="width:100%;display:block">
+                  </button>
+                  <figcaption style="font-size:12px;color:var(--muted);margin-top:6px">▲ 實際執行示意（Slack）— 僅為流程中的一段畫面示意，非完整流程。</figcaption>
+                </figure>
               </div>
             </article>
           </div>
@@ -1522,7 +1626,15 @@
     const lightbox = document.querySelector("#lightbox");
     const lightboxImg = document.querySelector("#lightbox-img");
     const lightboxClose = document.querySelector("#lightbox-close");
+    const siteHeader = document.querySelector(".site-header");
     const emptyImage = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+
+    function updateHeaderState() {
+      siteHeader.classList.toggle("is-scrolled", window.scrollY > 8);
+    }
+
+    updateHeaderState();
+    window.addEventListener("scroll", updateHeaderState, { passive: true });
 
     menuBtn.addEventListener("click", () => {
       const open = navLinks.classList.toggle("open");
@@ -1573,6 +1685,21 @@
     }, { threshold: [0.35, 0.6] });
 
     sections.forEach((section) => observer.observe(section));
+  </script>
+  <script>
+    (function () {
+      const hint = document.getElementById('personaHint');
+      const btns = document.querySelectorAll('.persona-btn');
+      btns.forEach((b) => {
+        b.addEventListener('click', () => {
+          btns.forEach((x) => x.classList.remove('on'));
+          b.classList.add('on');
+          if (hint) hint.textContent = b.dataset.msg;
+          const sec = document.getElementById(b.dataset.target);
+          if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      });
+    })();
   </script>
 </body>
 </html>
