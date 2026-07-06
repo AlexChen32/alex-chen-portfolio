@@ -1,1 +1,4 @@
 qa/
+.env
+.env.local
+.env*.local

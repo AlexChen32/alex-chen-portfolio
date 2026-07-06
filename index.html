@@ -3,9 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="陳勇學 Alex 作品集，聚焦自我介紹、軟體工程 AI 製作內容、技能工具、活動企劃與活動影像。">
+  <meta name="description" content="陳勇學 Alex 作品集，聚焦自我介紹、軟體工程 AI 製作內容、技能工具、活動企劃與活動影像，並提供 3D 互動履歷體驗。">
   <title>陳勇學 Alex | 作品集</title>
   <style>
+    @font-face {
+      font-family: 'WenKai';
+      src: url('fonts/wenkai-bold.woff2') format('woff2');
+      font-weight: 400 900;
+      font-display: swap;
+    }
+    .brand, .hero-name, .hero-copy h1, .section-head h2, .subsection-title, .card-copy h3, .about-card h3, .timeline h3, .time-item h4, .contact-panel h2, #thanks h2 {
+      font-family: 'WenKai', "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+    }
     :root {
       --bg: #fffdf9;
       --paper: #f8f5ef;
@@ -363,6 +372,35 @@
       .persona-btns { justify-content: center; }
     }
 
+    /* scroll-reveal（捲動漸入，仿 AOS） */
+    .reveal { opacity: 0; transform: translateY(28px);
+      transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1); }
+    .reveal.rx { transform: translateX(64px); }
+    .reveal.lx { transform: translateX(-64px); }
+    .reveal.in, .reveal.rx.in, .reveal.lx.in { opacity: 1; transform: none; }
+    @media (max-width: 640px) {
+      .reveal.rx, .reveal.lx { transform: translateY(28px); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+    }
+
+    /* 左右交錯排版（zigzag）：偶數寬卡片圖文左右對調 */
+    .project-card.wide.flip { grid-template-columns: 1fr 0.9fr; }
+    .project-card.wide.flip .card-image { order: 2; }
+    .project-card.wide.flip .card-copy { order: 1; }
+    @media (max-width: 1080px) {
+      .project-card.wide.flip { grid-template-columns: 170px 1fr; }
+      .project-card.wide.flip .card-image { order: 0; }
+      .project-card.wide.flip .card-copy { order: 0; }
+    }
+
+    .thanks-grid { display: grid; grid-template-columns: auto 1fr; gap: 44px; align-items: center; max-width: 780px; margin: 0 auto; }
+    @media (max-width: 640px) {
+      .thanks-grid { grid-template-columns: 1fr; text-align: center; gap: 20px; }
+      .thanks-grid img { margin: 0 auto; }
+    }
+
     .btn {
       position: relative;
       display: inline-flex;
@@ -370,7 +408,8 @@
       justify-content: center;
       gap: 9px;
       min-height: 48px;
-      padding: 11px 18px;
+      padding: 14px 32px;
+      letter-spacing: .08em;
       border-radius: 999px;
       border: 1px solid var(--ink);
       background: var(--ink);
@@ -418,10 +457,11 @@
     .section {
       border-top: 1px solid var(--line);
       padding: 72px 0;
+      background: var(--bg);
     }
 
     .section.alt {
-      background: var(--paper);
+      background: var(--bg);
     }
 
     .inner {
@@ -578,7 +618,7 @@
     .project-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 22px;
+      gap: 56px;
       align-items: start;
     }
 
@@ -586,18 +626,15 @@
       position: relative;
       display: grid;
       grid-template-columns: 170px 1fr;
-      gap: 18px;
-      padding: 18px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: #fff;
-      box-shadow: 0 9px 22px rgba(17, 24, 39, 0.05);
-      transition: transform 180ms ease, box-shadow 180ms ease;
+      gap: 44px;
+      align-items: center;
+      padding: 0;
+      background: transparent;
     }
 
     .project-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 16px 34px rgba(17, 24, 39, 0.12);
+      transform: none;
+      box-shadow: none;
     }
 
     .project-card.wide {
@@ -624,8 +661,8 @@
     }
 
     .events .year-badge {
-      background: var(--coral);
-      box-shadow: 0 10px 22px rgba(239, 91, 77, 0.24);
+      background: var(--teal);
+      box-shadow: 0 10px 22px rgba(16, 168, 160, 0.22);
     }
 
     .card-image {
@@ -650,7 +687,7 @@
     }
 
     .project-card:hover .card-image img {
-      transform: scale(1.04);
+      transform: none;
     }
 
     .live-cover {
@@ -720,7 +757,7 @@
     }
 
     .shots figure:hover img {
-      transform: scale(1.03);
+      transform: none;
     }
 
     .shots figcaption {
@@ -793,16 +830,13 @@
     }
 
     .events .mini-stat {
-      background: #fff4e1;
-      color: #a35705;
+      background: #e9f8f6;
+      color: #087f78;
     }
 
     .software-band {
-      border: 1px solid rgba(16, 168, 160, 0.20);
-      border-radius: var(--radius);
-      background: linear-gradient(135deg, rgba(16, 168, 160, 0.08), rgba(37, 99, 235, 0.08));
-      padding: 20px;
-      margin-bottom: 22px;
+      padding: 0;
+      margin-bottom: 64px;
     }
 
     .subsection-title {
@@ -817,7 +851,7 @@
     }
 
     .subsection-title.workflow {
-      color: var(--blue);
+      color: var(--teal);
     }
 
     .skills-grid {
@@ -858,7 +892,7 @@
 
     .event-timeline {
       display: grid;
-      gap: 18px;
+      gap: 56px;
     }
 
     .gallery {
@@ -982,7 +1016,7 @@
     .lightbox {
       position: fixed;
       inset: 0;
-      z-index: 50;
+      z-index: 1600;
       display: none;
       align-items: center;
       justify-content: center;
@@ -1014,6 +1048,189 @@
       cursor: pointer;
       font-size: 24px;
       line-height: 1;
+    }
+
+    .portfolio-assistant {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      z-index: 1150;
+      display: grid;
+      justify-items: end;
+      gap: 10px;
+      font-family: "Noto Sans TC", "Microsoft JhengHei", Arial, sans-serif;
+    }
+
+    .assistant-panel {
+      width: min(390px, calc(100vw - 32px));
+      max-height: min(560px, calc(100vh - 112px));
+      display: none;
+      grid-template-rows: auto 1fr auto;
+      overflow: hidden;
+      border: 1px solid rgba(17, 24, 39, 0.12);
+      border-radius: 18px;
+      background: rgba(255, 253, 249, 0.98);
+      box-shadow: 0 24px 70px rgba(17, 24, 39, 0.22);
+    }
+
+    .portfolio-assistant.open .assistant-panel {
+      display: grid;
+    }
+
+    .assistant-head {
+      display: grid;
+      grid-template-columns: 54px 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 14px;
+      border-bottom: 1px solid var(--line);
+      background:
+        radial-gradient(circle at 10% 0%, rgba(245, 158, 11, 0.20), transparent 42%),
+        #fff;
+    }
+
+    .assistant-head img {
+      width: 54px;
+      height: 54px;
+      object-fit: contain;
+      filter: drop-shadow(0 10px 14px rgba(17, 24, 39, 0.16));
+    }
+
+    .assistant-head strong {
+      display: block;
+      color: var(--ink);
+      font-size: 15px;
+      line-height: 1.4;
+      font-weight: 950;
+    }
+
+    .assistant-head span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+      font-weight: 750;
+    }
+
+    .assistant-close {
+      width: 34px;
+      height: 34px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+      color: var(--ink);
+      cursor: pointer;
+      font-size: 20px;
+      line-height: 1;
+    }
+
+    .assistant-messages {
+      display: grid;
+      align-content: start;
+      gap: 10px;
+      min-height: 260px;
+      padding: 14px;
+      overflow: auto;
+      background: linear-gradient(180deg, rgba(248,245,239,.78), rgba(255,253,249,.98));
+    }
+
+    .chat-msg {
+      max-width: 86%;
+      padding: 10px 12px;
+      border-radius: 14px;
+      color: var(--ink);
+      background: #fff;
+      box-shadow: 0 8px 20px rgba(17, 24, 39, 0.07);
+      font-size: 13px;
+      line-height: 1.65;
+      font-weight: 700;
+      white-space: pre-wrap;
+    }
+
+    .chat-msg.user {
+      justify-self: end;
+      background: var(--ink);
+      color: #fff;
+    }
+
+    .quick-questions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      padding: 0 14px 12px;
+      background: rgba(255, 253, 249, 0.98);
+    }
+
+    .quick-questions button {
+      min-height: 30px;
+      padding: 0 10px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+      color: var(--ink);
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .assistant-form {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      padding: 12px;
+      border-top: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .assistant-form input {
+      min-width: 0;
+      height: 40px;
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--paper);
+      color: var(--ink);
+      outline: none;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .assistant-form input:focus {
+      border-color: var(--teal);
+      box-shadow: 0 0 0 3px rgba(16, 168, 160, 0.12);
+    }
+
+    .assistant-form button,
+    .assistant-toggle {
+      border: 0;
+      background: var(--ink);
+      color: #fff;
+      cursor: pointer;
+      font-weight: 950;
+    }
+
+    .assistant-form button {
+      min-width: 64px;
+      height: 40px;
+      border-radius: 999px;
+      font-size: 13px;
+    }
+
+    .assistant-toggle {
+      min-height: 56px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px 6px 8px;
+      border-radius: 999px;
+      box-shadow: 0 16px 40px rgba(17, 24, 39, 0.20);
+      font-size: 14px;
+    }
+
+    .assistant-toggle img {
+      width: 46px;
+      height: 46px;
+      object-fit: contain;
     }
 
     @keyframes float {
@@ -1097,6 +1314,85 @@
         grid-column: span 2;
         min-height: 360px;
       }
+
+      .portfolio-assistant {
+        left: 14px;
+        right: 14px;
+        bottom: 14px;
+      }
+
+      .portfolio-assistant .assistant-panel {
+        width: 100%;
+      }
+    }
+
+    /* ===== 動態升級：捲動進度條 / 打字 / 進場 / 3D 傾斜 / 粒子 ===== */
+    #progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1200;
+      height: 3px;
+      width: 0;
+      background: linear-gradient(90deg, var(--orange), var(--coral), var(--teal));
+      box-shadow: 0 0 8px rgba(245, 158, 11, 0.5);
+      pointer-events: none;
+    }
+
+    #hero-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .hero-photo-wrap,
+    .hero-copy {
+      position: relative;
+      z-index: 1;
+    }
+
+    .type-caret {
+      display: inline-block;
+      width: 2px;
+      height: 1em;
+      margin-left: 3px;
+      vertical-align: -0.12em;
+      background: var(--orange);
+      animation: caretBlink 1s steps(1) infinite;
+    }
+
+    @keyframes caretBlink {
+      50% { opacity: 0; }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .reveal.in {
+      opacity: 1;
+      transform: none;
+    }
+
+    .tilt {
+      will-change: transform;
+    }
+
+    .btn.game {
+      border-color: transparent;
+      background: linear-gradient(120deg, #7c3aed, #2563eb, #10a8a0);
+      background-size: 200% 200%;
+      animation: gameGlow 5s ease infinite;
+    }
+
+    @keyframes gameGlow {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
     }
 
     @media (max-width: 760px) {
@@ -1115,6 +1411,15 @@
       .brand-mark {
         width: 24px;
         height: 24px;
+      }
+
+      .assistant-panel {
+        width: calc(100vw - 24px);
+        max-height: calc(100vh - 92px);
+      }
+
+      .assistant-toggle span {
+        display: none;
       }
 
       .menu-btn {
@@ -1221,6 +1526,7 @@
   </style>
 </head>
 <body>
+  <div id="progress-bar" aria-hidden="true"></div>
   <header class="site-header">
     <nav class="nav" aria-label="主要導覽">
       <a class="brand" href="#home"><span class="brand-mark" aria-hidden="true"></span>陳勇學 Alex</a>
@@ -1232,6 +1538,7 @@
         <a href="#skills">技能工具</a>
         <a href="#events">活動企劃</a>
         <a href="#gallery">活動影像</a>
+        <a href="resume3d.html">3D 履歷</a>
         <a href="#contact">聯絡資料</a>
       </div>
     </nav>
@@ -1239,6 +1546,7 @@
 
   <main>
     <section class="hero" id="home">
+      <canvas id="hero-canvas" aria-hidden="true"></canvas>
       <div class="hero-photo-wrap">
         <div class="hero-photo">
           <img src="images/profile_headshot.png" alt="陳勇學 Alex 大頭照">
@@ -1247,23 +1555,12 @@
       <div class="hero-copy">
         <h1>嗨，我是 Alex</h1>
         <div class="hero-rule"><span></span></div>
-        <p class="hero-subtitle">AI 製作內容 | Workflow 自動化 | 全端開發 | 政府標案執行</p>
+        <p class="hero-subtitle"><span id="typed">AI 製作內容 | Workflow 自動化 | 全端開發 | 政府標案執行</span><span class="type-caret" aria-hidden="true"></span></p>
         <p class="hero-summary">以「軟體工程・AI 協作」與「活動企劃・政府標案」兩大主軸，呈現網站開發、Workflow 自動化與專案執行的實作經驗。</p>
         <div class="hero-actions">
-          <a class="btn orange" href="#software">
-            瀏覽軟體作品
-            <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></span>
-          </a>
+          <a class="btn orange" href="#software">瀏覽軟體作品</a>
           <a class="btn secondary" href="#events">瀏覽活動經驗</a>
-        </div>
-        <div class="persona" id="persona">
-          <span class="persona-q">你是？我帶你看重點 👇</span>
-          <div class="persona-btns">
-            <button type="button" class="persona-btn" data-target="about" data-msg="給 HR／用人主管：先看我的工作經歷、定位與可立即上手的能力。">👔 HR／用人主管</button>
-            <button type="button" class="persona-btn" data-target="software" data-msg="給技術主管：WeCosplay 全端開發、n8n 自動化與技術細節都在這裡。">💻 技術主管</button>
-            <button type="button" class="persona-btn" data-target="events" data-msg="想看實際成果：政府標案、Accupass 1,690%、智慧城市展都在這。">🎯 想看成果</button>
-          </div>
-          <p class="persona-hint" id="personaHint"></p>
+          <a class="btn game" href="resume3d.html">🌌 進入星空互動履歷</a>
         </div>
       </div>
     </section>
@@ -1582,26 +1879,18 @@
         </div>
       </div>
     </section>
-
-    <section class="section" id="contact">
+    <section class="section" id="thanks">
       <div class="inner">
-        <div class="contact-panel">
+        <div class="thanks-grid">
           <div>
-            <h2>聯絡資料</h2>
+            <a href="mailto:d3332565@gmail.com" aria-label="寄信給我：d3332565@gmail.com" style="display:block;text-decoration:none;cursor:pointer">
+              <div class="doge-fallback" style="display:none;font-size:96px;line-height:1">🐕</div>
+              <img src="images/doge.png" alt="點我寄信給陳勇學" onerror="this.style.display='none';var f=this.parentNode.querySelector('.doge-fallback');if(f)f.style.display='block';" style="width:min(230px,44vw);border-radius:16px;display:block;box-shadow:var(--soft-shadow)">
+            </a>
           </div>
-          <div class="contact-facts">
-              <div class="fact">
-              <strong>姓名</strong>
-              <span>陳勇學</span>
-            </div>
-            <div class="fact">
-              <strong>Email</strong>
-              <a href="mailto:d3332565@gmail.com">d3332565@gmail.com</a>
-            </div>
-            <div class="fact">
-              <strong>所在地</strong>
-              <span>桃園市桃園區</span>
-            </div>
+          <div>
+            <h2 style="font-size:clamp(24px,3.4vw,38px);font-weight:950;margin-bottom:12px">感謝各位看到這邊</h2>
+            <p style="color:var(--muted);max-width:460px">如果您對我有興趣，歡迎直接寄信到 <a href="mailto:d3332565@gmail.com" style="color:var(--teal);font-weight:800">d3332565@gmail.com</a>，我會在 <b style="color:var(--ink)">一天內</b> 回覆您。期待有機會與您聊聊！</p>
           </div>
         </div>
       </div>
@@ -1614,6 +1903,33 @@
       <span>陳勇學 個人作品集</span>
     </div>
   </footer>
+
+  <aside class="portfolio-assistant" id="portfolioAssistant">
+    <div class="assistant-panel" aria-live="polite">
+      <div class="assistant-head">
+        <img src="images_web/看板娘_cutout.png" alt="黑色短髮 Q 版助手">
+        <div>
+          <strong>作品集助手</strong>
+          <span>可詢問企劃、自動化、網站與專案管理能力</span>
+        </div>
+        <button class="assistant-close" type="button" id="assistantClose" aria-label="關閉作品集助手">×</button>
+      </div>
+      <div class="assistant-messages" id="assistantMessages"></div>
+      <div class="quick-questions" aria-label="快速提問">
+        <button type="button" data-question="企劃能力如何？">企劃能力</button>
+        <button type="button" data-question="AI 自動化經驗有哪些？">AI 自動化</button>
+        <button type="button" data-question="WeCosplay 專案代表什麼能力？">網站專案</button>
+      </div>
+      <form class="assistant-form" id="assistantForm">
+        <input id="assistantInput" type="text" autocomplete="off" placeholder="請輸入想詢問的內容">
+        <button type="submit">送出</button>
+      </form>
+    </div>
+    <button class="assistant-toggle" type="button" id="assistantToggle" aria-expanded="false">
+      <img src="images_web/看板娘_cutout.png" alt="">
+      <span>詢問作品集助手</span>
+    </button>
+  </aside>
 
   <div class="lightbox" id="lightbox" aria-hidden="true">
     <button type="button" id="lightbox-close" aria-label="關閉圖片">×</button>
@@ -1688,6 +2004,172 @@
   </script>
   <script>
     (function () {
+      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      /* ---- 捲動進度條 ---- */
+      const bar = document.getElementById("progress-bar");
+      function updateBar() {
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        bar.style.width = (max > 0 ? (window.scrollY / max) * 100 : 0) + "%";
+      }
+      updateBar();
+      window.addEventListener("scroll", updateBar, { passive: true });
+      window.addEventListener("resize", updateBar);
+
+      /* ---- Hero 打字輪播 ---- */
+      const typed = document.getElementById("typed");
+      const caret = document.querySelector(".type-caret");
+      const phrases = [
+        "AI 製作內容 × Workflow 自動化",
+        "全端開發 × 網站製作",
+        "政府標案執行 × 活動企劃",
+        "品牌行銷 × 社群經營"
+      ];
+      if (typed && !reduced) {
+        let pi = 0, ci = 0, deleting = false;
+        (function tick() {
+          const word = phrases[pi];
+          typed.textContent = word.slice(0, ci);
+          let delay = deleting ? 34 : 82;
+          if (!deleting && ci === word.length) { delay = 1800; deleting = true; }
+          else if (deleting && ci === 0) { deleting = false; pi = (pi + 1) % phrases.length; delay = 350; }
+          else ci += deleting ? -1 : 1;
+          setTimeout(tick, delay);
+        })();
+      } else if (caret) {
+        caret.style.display = "none";
+      }
+
+      /* ---- 數字計數動畫 ---- */
+      function animateCount(el) {
+        const raw = el.textContent.trim();
+        const match = raw.match(/^([\d,.]+)(.*)$/);
+        if (!match) return;
+        const target = parseFloat(match[1].replace(/,/g, ""));
+        const suffix = match[2] || "";
+        const hasComma = match[1].includes(",");
+        const dur = 1500, start = performance.now();
+        function frame(now) {
+          const t = Math.min((now - start) / dur, 1);
+          const eased = 1 - Math.pow(1 - t, 3);
+          let val = Math.round(target * eased);
+          el.textContent = (hasComma ? val.toLocaleString("en-US") : val) + suffix;
+          if (t < 1) requestAnimationFrame(frame);
+        }
+        requestAnimationFrame(frame);
+      }
+      if (!reduced) {
+        const statObserver = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            animateCount(entry.target);
+            statObserver.unobserve(entry.target);
+          });
+        }, { threshold: 0.5 });
+        document.querySelectorAll(".stat strong").forEach((el) => statObserver.observe(el));
+      }
+
+      /* ---- 區塊進場動畫 ---- */
+      if (!reduced && "IntersectionObserver" in window) {
+        const targets = document.querySelectorAll(
+          ".section-head, .stat, .about-card, .timeline, .time-item, .project-card, .skill-card, .shots figure, .gallery button, .contact-panel"
+        );
+        const revealObserver = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add("in");
+            revealObserver.unobserve(entry.target);
+          });
+        }, { threshold: 0.12, rootMargin: "0px 0px -6% 0px" });
+        targets.forEach((el, i) => {
+          el.classList.add("reveal");
+          el.style.transitionDelay = (i % 4) * 70 + "ms";
+          revealObserver.observe(el);
+        });
+      }
+
+      /* ---- 卡片 3D 傾斜（桌機） ---- */
+      if (!reduced && window.matchMedia("(pointer: fine)").matches) {
+        document.querySelectorAll(".project-card, .skill-card, .stat").forEach((card) => {
+          card.classList.add("tilt");
+          card.addEventListener("mousemove", (e) => {
+            const r = card.getBoundingClientRect();
+            const x = (e.clientX - r.left) / r.width - 0.5;
+            const y = (e.clientY - r.top) / r.height - 0.5;
+            card.style.transform = `perspective(900px) rotateX(${(-y * 5).toFixed(2)}deg) rotateY(${(x * 6).toFixed(2)}deg) translateY(-4px)`;
+          });
+          card.addEventListener("mouseleave", () => {
+            card.style.transform = "";
+          });
+        });
+      }
+
+      /* ---- Hero 粒子網絡 ---- */
+      const canvas = document.getElementById("hero-canvas");
+      if (canvas && !reduced) {
+        const ctx = canvas.getContext("2d");
+        const hero = canvas.parentElement;
+        const palette = ["rgba(245,158,11,", "rgba(16,168,160,", "rgba(239,91,77,"];
+        let dots = [], w = 0, h = 0, mouse = { x: -999, y: -999 };
+        function resize() {
+          const dpr = Math.min(window.devicePixelRatio || 1, 2);
+          w = hero.clientWidth; h = hero.clientHeight;
+          canvas.width = w * dpr; canvas.height = h * dpr;
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+          const n = Math.min(70, Math.floor(w / 18));
+          dots = Array.from({ length: n }, () => ({
+            x: Math.random() * w, y: Math.random() * h,
+            vx: (Math.random() - 0.5) * 0.4, vy: (Math.random() - 0.5) * 0.4,
+            r: 1.2 + Math.random() * 1.8, c: palette[(Math.random() * palette.length) | 0]
+          }));
+        }
+        resize();
+        window.addEventListener("resize", resize);
+        hero.addEventListener("mousemove", (e) => {
+          const r = hero.getBoundingClientRect();
+          mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top;
+        });
+        hero.addEventListener("mouseleave", () => { mouse.x = -999; mouse.y = -999; });
+        (function draw() {
+          ctx.clearRect(0, 0, w, h);
+          for (const d of dots) {
+            d.x += d.vx; d.y += d.vy;
+            if (d.x < 0 || d.x > w) d.vx *= -1;
+            if (d.y < 0 || d.y > h) d.vy *= -1;
+            ctx.beginPath();
+            ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+            ctx.fillStyle = d.c + "0.5)";
+            ctx.fill();
+          }
+          for (let i = 0; i < dots.length; i++) {
+            for (let j = i + 1; j < dots.length; j++) {
+              const dx = dots[i].x - dots[j].x, dy = dots[i].y - dots[j].y;
+              const dist = Math.hypot(dx, dy);
+              if (dist < 110) {
+                ctx.beginPath();
+                ctx.moveTo(dots[i].x, dots[i].y);
+                ctx.lineTo(dots[j].x, dots[j].y);
+                ctx.strokeStyle = "rgba(16,168,160," + (0.22 * (1 - dist / 110)).toFixed(3) + ")";
+                ctx.stroke();
+              }
+            }
+            const mdx = dots[i].x - mouse.x, mdy = dots[i].y - mouse.y;
+            const mdist = Math.hypot(mdx, mdy);
+            if (mdist < 150) {
+              ctx.beginPath();
+              ctx.moveTo(dots[i].x, dots[i].y);
+              ctx.lineTo(mouse.x, mouse.y);
+              ctx.strokeStyle = "rgba(245,158,11," + (0.3 * (1 - mdist / 150)).toFixed(3) + ")";
+              ctx.stroke();
+            }
+          }
+          requestAnimationFrame(draw);
+        })();
+      }
+    })();
+  </script>
+  <script>
+    (function () {
       const hint = document.getElementById('personaHint');
       const btns = document.querySelectorAll('.persona-btn');
       btns.forEach((b) => {
@@ -1697,6 +2179,132 @@
           if (hint) hint.textContent = b.dataset.msg;
           const sec = document.getElementById(b.dataset.target);
           if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      });
+    })();
+  </script>
+  <script>
+    (function () {
+      if (!('IntersectionObserver' in window)) return;
+      const sel = '.section-head, .about-card, .time-item, .project-card, .skill-card, .stat, .shots figure, .gallery button, .contact-panel, #thanks .inner > div';
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+      }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+      document.querySelectorAll(sel).forEach((el) => { el.classList.add('reveal'); io.observe(el); });
+      document.querySelectorAll('#software .project-card.wide, #events .project-card.wide').forEach((c, i) => { if (i % 2) { c.classList.add('flip', 'lx'); } else { c.classList.add('rx'); } });
+    })();
+  </script>
+  <script>
+    (function () {
+      const root = document.getElementById("portfolioAssistant");
+      if (!root) return;
+
+      const toggle = document.getElementById("assistantToggle");
+      const close = document.getElementById("assistantClose");
+      const form = document.getElementById("assistantForm");
+      const input = document.getElementById("assistantInput");
+      const messages = document.getElementById("assistantMessages");
+      const outOfScopeAnswer = "這不在我能回答的範圍內。請問還有什麼想要諮詢的嗎？";
+
+      const answers = [
+        {
+          keys: ["企劃", "活動", "標案", "政府", "kpi", "接待", "accupass"],
+          text: "具備企劃書撰寫、活動規劃、KPI 追蹤、對外協調、成果報告與核銷資料整理能力。曾執行桃園安東青創基地政府計畫，成果包含 Accupass 追蹤成長 1,690%、累計服務 10,000+ 人次與 95%+ 滿意度。"
+        },
+        {
+          keys: ["自動化", "ai", "n8n", "workflow", "流程", "效率", "sop"],
+          text: "具備實務流程優化與 AI 自動化導入經驗：自建 4 套 n8n 工作流，整合 Claude / OpenAI / Gemini API、HTTP Request、Webhook 與 Google 服務，包含社群分析週報、資料整理、Telegram AI Agent 與文件輔助流程。"
+        },
+        {
+          keys: ["網站", "wecosplay", "產品", "全端", "api", "pm", "專案經理", "軟體"],
+          text: "具備產品需求拆解、頁面流程規劃、功能驗收與開發協作能力。WeCosplay 以 AI 協作完成 Next.js / TypeScript / MongoDB / Vercel 全端平台展示，作品包含 90+ API、13 個後台管理模組、3 語系與 CI/CD 部署概念。"
+        },
+        {
+          keys: ["溝通", "協調", "跨部門", "合作", "廠商"],
+          text: "具備政府專案、活動現場與基地營運溝通協調經驗，可對接主管機關、合作單位、講師、新創團隊、參訪團體與現場人員。適合需要需求整理、時程推進與成果追蹤的企劃或產品專案角色。"
+        },
+        {
+          keys: ["聯絡", "email", "信箱", "面試"],
+          text: "可以直接透過頁面下方的聯絡區寄信給陳勇學，信箱是 d3332565@gmail.com。若是面試情境，建議優先詢問活動企劃、AI 流程優化與 WeCosplay 產品協作三個主題。"
+        }
+      ];
+
+      function addMessage(role, text) {
+        const bubble = document.createElement("div");
+        bubble.className = role === "user" ? "chat-msg user" : "chat-msg";
+        bubble.textContent = text;
+        messages.appendChild(bubble);
+        messages.scrollTop = messages.scrollHeight;
+        return bubble;
+      }
+
+      function pickAnswer(question) {
+        const normalized = question.trim().toLowerCase();
+        const hit = answers.find((item) => item.keys.some((key) => normalized.includes(key.toLowerCase())));
+        if (hit) return hit.text;
+        return outOfScopeAnswer;
+      }
+
+      async function requestAssistantAnswer(question) {
+        const response = await fetch("/api/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: question })
+        });
+
+        if (!response.ok) throw new Error("Assistant API unavailable");
+
+        const data = await response.json();
+        return data.answer || pickAnswer(question);
+      }
+
+      function openAssistant() {
+        root.classList.add("open");
+        toggle.setAttribute("aria-expanded", "true");
+        if (!messages.dataset.seeded) {
+          addMessage("assistant", "可詢問企劃能力、AI 自動化經驗，或 WeCosplay 專案代表的產品與開發協作能力。");
+          messages.dataset.seeded = "true";
+        }
+        window.setTimeout(() => input.focus(), 80);
+      }
+
+      function closeAssistant() {
+        root.classList.remove("open");
+        toggle.setAttribute("aria-expanded", "false");
+      }
+
+      async function ask(question) {
+        const value = question.trim();
+        if (!value) return;
+        addMessage("user", value);
+        input.value = "";
+        const pending = addMessage("assistant", "正在整理履歷資料...");
+
+        try {
+          pending.textContent = await requestAssistantAnswer(value);
+        } catch {
+          pending.textContent = pickAnswer(value);
+        }
+
+        messages.scrollTop = messages.scrollHeight;
+      }
+
+      toggle.addEventListener("click", () => {
+        if (root.classList.contains("open")) closeAssistant();
+        else openAssistant();
+      });
+
+      close.addEventListener("click", closeAssistant);
+
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        ask(input.value);
+      });
+
+      root.querySelectorAll("[data-question]").forEach((button) => {
+        button.addEventListener("click", () => {
+          openAssistant();
+          ask(button.dataset.question || "");
         });
       });
     })();
