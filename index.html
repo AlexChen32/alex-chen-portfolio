@@ -373,11 +373,18 @@
     }
 
     /* scroll-reveal（捲動漸入，仿 AOS） */
-    .reveal { opacity: 0; transform: translateY(28px);
-      transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1); }
-    .reveal.rx { transform: translateX(64px); }
-    .reveal.lx { transform: translateX(-64px); }
-    .reveal.in, .reveal.rx.in, .reveal.lx.in { opacity: 1; transform: none; }
+    .reveal {
+      opacity: 0;
+      transform: translate3d(0, 34px, 0) scale(0.985);
+      transition: opacity 90ms linear, transform 90ms linear;
+      will-change: opacity, transform;
+    }
+    .reveal.rx { transform: translate3d(72px, 0, 0) scale(0.985); }
+    .reveal.lx { transform: translate3d(-72px, 0, 0) scale(0.985); }
+    .reveal.in, .reveal.rx.in, .reveal.lx.in {
+      opacity: 1;
+      transform: translate3d(0, 0, 0) scale(1);
+    }
     @media (max-width: 640px) {
       .reveal.rx, .reveal.lx { transform: translateY(28px); }
     }
@@ -389,10 +396,14 @@
     .project-card.wide.flip { grid-template-columns: 1fr 0.9fr; }
     .project-card.wide.flip .card-image { order: 2; }
     .project-card.wide.flip .card-copy { order: 1; }
+    /* flip 卡：文字在左、圖片在右 → 年份徽章移到右上（壓在圖片上、不擋標題） */
+    .project-card.wide.flip .year-badge { left: auto; right: 12px; }
     @media (max-width: 1080px) {
       .project-card.wide.flip { grid-template-columns: 170px 1fr; }
       .project-card.wide.flip .card-image { order: 0; }
       .project-card.wide.flip .card-copy { order: 0; }
+      /* ≤1080px：flip 取消、圖片回左邊 → 徽章也回左上，避免壓到右側文字 */
+      .project-card.wide.flip .year-badge { left: 12px; right: auto; }
     }
 
     .thanks-grid { display: grid; grid-template-columns: auto 1fr; gap: 44px; align-items: center; max-width: 780px; margin: 0 auto; }
@@ -1373,17 +1384,6 @@
       50% { opacity: 0; }
     }
 
-    .reveal {
-      opacity: 0;
-      transform: translateY(28px);
-      transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .reveal.in {
-      opacity: 1;
-      transform: none;
-    }
-
     .tilt {
       will-change: transform;
     }
@@ -1660,6 +1660,34 @@
         </div>
 
         <div class="software-band">
+          <h3 class="subsection-title">
+            <span class="icon" style="width:17px;height:17px" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 9h8"/><path d="M8 13h5"/></svg></span>
+            AI 應用開發
+          </h3>
+          <div class="project-grid">
+            <article class="project-card wide">
+              <span class="year-badge">2026</span>
+              <button class="card-image" type="button" aria-label="放大 AI 履歷客服助手介面截圖" style="min-height:0;background:#f4f6f8;display:flex;align-items:center;justify-content:center;padding:14px"><img src="images/ai_assistant.png" alt="AI 履歷客服助手介面截圖" data-lightbox style="width:auto;height:auto;max-width:100%;max-height:240px;object-fit:contain"></button>
+              <div class="card-copy">
+                <h3>AI 履歷客服助手｜RAG 知識庫問答</h3>
+                <p class="role">產品規劃 / AI 應用整合 / 部署上線</p>
+                <ul class="action-list">
+                  <li>履歷知識庫 × Gemini LLM，以 RAG 概念先檢索作品集內容再由 LLM 回答，並用 Prompt 約束「只依履歷資料作答」，降低幻覺與離題。</li>
+                  <li>設計模型 fallback（多個 Gemini 模型自動切換）、以後端代理保護 API Key；從需求定義、架構取捨到部署維運一手包辦，未來可升級為 Embedding + 向量資料庫。</li>
+                </ul>
+                <div class="result-row">
+                  <span class="mini-stat">RAG</span>
+                  <span class="mini-stat">Gemini LLM</span>
+                  <span class="mini-stat">模型 fallback</span>
+                </div>
+                <p style="margin:14px 0 0;font-size:13px;color:var(--teal);font-weight:850;">▸ 想試用？點右下角的 AI 助手直接發問</p>
+                <p style="margin:8px 0 0;font-size:12.5px;color:#e03131;font-weight:800;line-height:1.55;">※ 目前以免費 API 額度運作；若助手暫時無法回覆，代表當下 RPM／RPD／TPM 額度已滿，請稍後再試。</p>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <div class="software-band">
           <h3 class="subsection-title workflow">
             <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m13 2-8 12h7l-1 8 8-12h-7z"/></svg></span>
             Workflow 自動化
@@ -1853,7 +1881,7 @@
 
           <article class="project-card wide">
             <span class="year-badge">2025</span>
-            <button class="card-image" type="button" aria-label="放大智慧城市展圖片"><img src="images\LINE_ALBUM_2025智慧城市展_251215_1.jpg" alt="2025 智慧城市展與 Tech Day 活動照片" data-lightbox></button>
+            <button class="card-image" type="button" aria-label="放大智慧城市展圖片"><img src="images/smartcity_techday_2025.jpg" alt="2025 智慧城市展與 Tech Day 活動照片" data-lightbox></button>
             <div class="card-copy">
               <h3>2025 智慧城市展</h3>
               <p class="role">展位規劃 / 專案統籌</p>
@@ -1913,7 +1941,7 @@
   <aside class="portfolio-assistant" id="portfolioAssistant">
     <div class="assistant-panel" aria-live="polite">
       <div class="assistant-head">
-        <img src="images_web/看板娘_cutout.png" alt="黑色短髮 Q 版助手">
+        <img src="images_web/assistant_avatar.png" alt="黑色短髮 Q 版助手">
         <div>
           <strong>作品集助手</strong>
           <span>可詢問企劃、自動化、網站與專案管理能力</span>
@@ -1932,7 +1960,7 @@
       </form>
     </div>
     <button class="assistant-toggle" type="button" id="assistantToggle" aria-expanded="false">
-      <img src="images_web/看板娘_cutout.png" alt="">
+      <img src="images_web/assistant_avatar.png" alt="">
       <span>詢問作品集助手</span>
     </button>
   </aside>
@@ -2076,24 +2104,6 @@
       }
 
       /* ---- 區塊進場動畫 ---- */
-      if (!reduced && "IntersectionObserver" in window) {
-        const targets = document.querySelectorAll(
-          ".section-head, .stat, .about-card, .timeline, .time-item, .project-card, .skill-card, .shots figure, .gallery button, .contact-panel"
-        );
-        const revealObserver = new IntersectionObserver((entries) => {
-          entries.forEach((entry) => {
-            if (!entry.isIntersecting) return;
-            entry.target.classList.add("in");
-            revealObserver.unobserve(entry.target);
-          });
-        }, { threshold: 0.12, rootMargin: "0px 0px -6% 0px" });
-        targets.forEach((el, i) => {
-          el.classList.add("reveal");
-          el.style.transitionDelay = (i % 4) * 70 + "ms";
-          revealObserver.observe(el);
-        });
-      }
-
       /* 卡片 3D 傾斜已移除（依需求：專案卡不做滑鼠晃動效果） */
 
       /* ---- Hero 粒子網絡 ---- */
@@ -2177,13 +2187,84 @@
   </script>
   <script>
     (function () {
-      if (!('IntersectionObserver' in window)) return;
-      const sel = '.section-head, .about-card, .time-item, .project-card, .skill-card, .stat, .shots figure, .gallery button, .contact-panel, #thanks .inner > div';
-      const io = new IntersectionObserver((entries) => {
-        entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
-      }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
-      document.querySelectorAll(sel).forEach((el) => { el.classList.add('reveal'); io.observe(el); });
-      document.querySelectorAll('#software .project-card.wide, #events .project-card.wide').forEach((c, i) => { if (i % 2) { c.classList.add('flip', 'lx'); } else { c.classList.add('rx'); } });
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const selector = '.section-head, .about-card, .timeline, .time-item, .project-card, .skill-card, .stat, .shots figure, .gallery button, .contact-panel';
+      const targets = [...document.querySelectorAll(selector)];
+      const mobileQuery = window.matchMedia('(max-width: 640px)');
+      let ticking = false;
+
+      document.querySelectorAll('#software .project-card.wide, #events .project-card.wide').forEach((card, index) => {
+        if (index % 2) {
+          card.classList.add('flip', 'lx');
+        } else {
+          card.classList.add('rx');
+        }
+      });
+
+      if (!targets.length) return;
+
+      targets.forEach((el) => {
+        el.classList.add('reveal');
+        el.style.transitionDelay = '0ms';
+      });
+
+      if (reduced) {
+        targets.forEach((el) => el.classList.add('in'));
+        return;
+      }
+
+      function clamp(value, min, max) {
+        return Math.min(Math.max(value, min), max);
+      }
+
+      function easeOutCubic(value) {
+        return 1 - Math.pow(1 - value, 3);
+      }
+
+      function getRevealOffset(el) {
+        if (mobileQuery.matches) return { x: 0, y: 34 };
+        if (el.classList.contains('lx')) return { x: -72, y: 0 };
+        if (el.classList.contains('rx')) return { x: 72, y: 0 };
+        return { x: 0, y: 34 };
+      }
+
+      function getRevealProgress(rect) {
+        const viewport = window.innerHeight || document.documentElement.clientHeight;
+        const start = viewport * 0.94;
+        const end = viewport * 0.28;
+        const anchor = rect.top + rect.height * 0.35;
+        return clamp((start - anchor) / (start - end), 0, 1);
+      }
+
+      function applyReveal(el) {
+        const progress = easeOutCubic(getRevealProgress(el.getBoundingClientRect()));
+        const offset = getRevealOffset(el);
+        const x = offset.x * (1 - progress);
+        const y = offset.y * (1 - progress);
+        const scale = 0.985 + progress * 0.015;
+
+        el.style.opacity = progress.toFixed(3);
+        el.style.transform = `translate3d(${x.toFixed(2)}px, ${y.toFixed(2)}px, 0) scale(${scale.toFixed(3)})`;
+        el.classList.toggle('in', progress > 0.985);
+      }
+
+      function updateReveals() {
+        ticking = false;
+        targets.forEach(applyReveal);
+      }
+
+      function requestRevealUpdate() {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(updateReveals);
+      }
+
+      requestRevealUpdate();
+      window.addEventListener('scroll', requestRevealUpdate, { passive: true });
+      window.addEventListener('resize', requestRevealUpdate);
+      if (mobileQuery.addEventListener) {
+        mobileQuery.addEventListener('change', requestRevealUpdate);
+      }
     })();
   </script>
   <script>
