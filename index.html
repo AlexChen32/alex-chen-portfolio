@@ -2231,6 +2231,13 @@
         return outOfScopeAnswer;
       }
 
+      function cleanAssistantAnswer(text) {
+        return String(text || "")
+          .replace(/\*\*([^*]+)\*\*/g, "$1")
+          .replace(/^#{1,6}\s+/gm, "")
+          .trim();
+      }
+
       async function requestAssistantAnswer(question) {
         const response = await fetch("/api/chat", {
           method: "POST",
@@ -2241,7 +2248,7 @@
         if (!response.ok) throw new Error("Assistant API unavailable");
 
         const data = await response.json();
-        return data.answer || pickAnswer(question);
+        return cleanAssistantAnswer(data.answer || pickAnswer(question));
       }
 
       function openAssistant() {
@@ -2269,7 +2276,7 @@
         try {
           pending.textContent = await requestAssistantAnswer(value);
         } catch {
-          pending.textContent = pickAnswer(value);
+          pending.textContent = cleanAssistantAnswer(pickAnswer(value));
         }
 
         messages.scrollTop = messages.scrollHeight;

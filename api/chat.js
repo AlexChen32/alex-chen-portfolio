@@ -5,6 +5,8 @@ const OUT_OF_SCOPE =
   "這不在我能回答的範圍內。請問還有什麼想要諮詢的嗎？";
 const MODEL = process.env.GEMINI_MODEL || process.env.gemini_model || "gemini-3.5-flash";
 const MAX_MESSAGE_LENGTH = 500;
+const DEFAULT_MAX_OUTPUT_TOKENS = 1100;
+const REWRITE_MAX_OUTPUT_TOKENS = 520;
 
 function normalize(value) {
   return String(value || "").toLowerCase().normalize("NFKC");
@@ -57,6 +59,9 @@ function buildSystemPrompt() {
     "回答範圍限於陳勇學的履歷、經歷、專案、作品、技能、成果與聯絡方式。",
     "若資料中確實沒有答案，就誠實說明目前資料未涵蓋，並主動引導對方詢問可回答的主題（工作經歷、AI 與自動化、WeCosplay 專案、活動企劃、聯絡方式等）。",
     "如果問題與陳勇學的履歷或作品集完全無關（例如天氣、新聞、財經、醫療、法律、政治、寫程式教學、日常閒聊等），請禮貌婉拒並把話題帶回，例如：「這部分我不太方便回答，我主要負責介紹陳勇學的經歷與作品，有什麼想了解的嗎？」",
+    "回答請控制在 2 到 4 個短段落，或最多 3 個完整條列。不要只列標題，不要停在冒號、逗號或未展開的條列。",
+    "前端會以純文字顯示回答，請不要使用 Markdown 粗體、標題語法或表格。",
+    "每次回答都必須完整收尾，最後一句需以句號、問號或驚嘆號結束。",
     "一律使用繁體中文，語氣友善、段落簡潔、重點清楚。"
   ].join("\n");
 }
@@ -72,18 +77,60 @@ function buildUserPrompt(message, chunks) {
     "可使用的履歷資料：",
     context,
     "",
-    "請直接回答使用者問題；如果問題超出履歷範圍，請回覆指定的超出範圍句。"
+    "請直接回答使用者問題；如果問題超出履歷範圍，請回覆指定的超出範圍句。",
+    "請確保回答完整，不要以未完成的條列、標題、冒號或 Markdown 粗體標記結尾。"
   ].join("\n");
 }
 
-async function callGemini(message, chunks) {
-  const apiKey = process.env.GEMINI_API_KEY || process.env.gemini_api_key;
-  if (!apiKey) {
-    const error = new Error("Missing GEMINI_API_KEY");
-    error.statusCode = 503;
-    throw error;
-  }
+function buildRewritePrompt(message, chunks, draftAnswer) {
+  const context = chunks
+    .map((chunk) => `【${chunk.title}】\n${chunk.content}`)
+    .join("\n\n");
 
+  return [
+    `使用者問題：${message}`,
+    "",
+    "可使用的履歷資料：",
+    context,
+    "",
+    "上一版回答疑似中斷或格式未完成：",
+    draftAnswer || "（無有效回答）",
+    "",
+    "請重新輸出一版完整、較短、自然的回答：",
+    "- 120 到 220 字內。",
+    "- 不要使用 Markdown 粗體標記。",
+    "- 若使用條列，每一點都要是完整句子。",
+    "- 不要停在標題、冒號、逗號或未完成句。",
+    "- 最後一句必須完整收尾。"
+  ].join("\n");
+}
+
+function extractGeminiResult(data) {
+  const candidate = data.candidates?.[0];
+  const answer = candidate?.content?.parts
+    ?.map((part) => part.text || "")
+    .join("")
+    .trim();
+
+  return {
+    answer: answer || "",
+    finishReason: candidate?.finishReason || ""
+  };
+}
+
+function looksIncompleteAnswer(answer, finishReason) {
+  const text = String(answer || "").trim();
+  if (!text) return true;
+  if (finishReason === "MAX_TOKENS") return true;
+  if ((text.match(/\*\*/g) || []).length % 2 === 1) return true;
+  if (/[：:，,、；;]$/.test(text)) return true;
+  if (/(^|\n)\s*[-*]\s*(\*\*)?[^。！？!?]*$/.test(text) && !/[。！？!?]$/.test(text)) return true;
+  if (/(包含|例如|如下|分別是|重點有)$/.test(text)) return true;
+  if (/\*\*$/.test(text) && !/[。！？!?]$/.test(text)) return true;
+  return false;
+}
+
+async function requestGemini(apiKey, prompt, maxOutputTokens) {
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(
     MODEL
   )}:generateContent?key=${encodeURIComponent(apiKey)}`;
@@ -98,12 +145,12 @@ async function callGemini(message, chunks) {
       contents: [
         {
           role: "user",
-          parts: [{ text: buildUserPrompt(message, chunks) }]
+          parts: [{ text: prompt }]
         }
       ],
       generationConfig: {
-        temperature: 0.55,
-        maxOutputTokens: 640
+        temperature: 0.45,
+        maxOutputTokens
       }
     })
   });
@@ -114,13 +161,29 @@ async function callGemini(message, chunks) {
     throw error;
   }
 
-  const data = await response.json();
-  const answer = data.candidates?.[0]?.content?.parts
-    ?.map((part) => part.text || "")
-    .join("")
-    .trim();
+  return extractGeminiResult(await response.json());
+}
 
-  return answer || OUT_OF_SCOPE;
+async function callGemini(message, chunks) {
+  const apiKey = process.env.GEMINI_API_KEY || process.env.gemini_api_key;
+  if (!apiKey) {
+    const error = new Error("Missing GEMINI_API_KEY");
+    error.statusCode = 503;
+    throw error;
+  }
+
+  const firstResult = await requestGemini(apiKey, buildUserPrompt(message, chunks), DEFAULT_MAX_OUTPUT_TOKENS);
+  if (!looksIncompleteAnswer(firstResult.answer, firstResult.finishReason)) {
+    return firstResult.answer;
+  }
+
+  const rewriteResult = await requestGemini(
+    apiKey,
+    buildRewritePrompt(message, chunks, firstResult.answer),
+    REWRITE_MAX_OUTPUT_TOKENS
+  );
+
+  return rewriteResult.answer || firstResult.answer || OUT_OF_SCOPE;
 }
 
 module.exports = async function handler(req, res) {
