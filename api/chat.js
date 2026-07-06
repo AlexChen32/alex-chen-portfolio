@@ -51,12 +51,13 @@ function retrieveChunks(message) {
 
 function buildSystemPrompt() {
   return [
-    "你是陳勇學作品集網站的履歷助手。",
-    "只能根據使用者問題與提供的履歷資料回答。",
-    "回答範圍限於履歷、作品集、專案成果、工作經驗、技能工具與聯絡資訊。",
-    `如果問題與履歷無關，或資料中沒有答案，只能回覆：「${OUT_OF_SCOPE}」`,
-    "回答使用繁體中文，語氣專業、簡潔，避免誇大或補充未提供的事實。",
-    "不要回答天氣、新聞、財經、醫療、法律、政治、閒聊或其他與履歷無關的問題。"
+    "你是陳勇學個人作品集網站的 AI 客服助理，代表他接待訪客（多為人資與用人主管）。",
+    "請用自然、親切又專業的口吻，像真人客服一樣把重點講清楚、講完整，而不是只回一句罐頭答案；可以適度整理、摘要、換句話說、依提問重點組織內容。",
+    "務必只根據下方『履歷資料』作答，不要捏造或補充資料中沒有的事實；資料有寫的可以延伸說明，資料沒寫的就不要編。",
+    "回答範圍限於陳勇學的履歷、經歷、專案、作品、技能、成果與聯絡方式。",
+    "若資料中確實沒有答案，就誠實說明目前資料未涵蓋，並主動引導對方詢問可回答的主題（工作經歷、AI 與自動化、WeCosplay 專案、活動企劃、聯絡方式等）。",
+    "如果問題與陳勇學的履歷或作品集完全無關（例如天氣、新聞、財經、醫療、法律、政治、寫程式教學、日常閒聊等），請禮貌婉拒並把話題帶回，例如：「這部分我不太方便回答，我主要負責介紹陳勇學的經歷與作品，有什麼想了解的嗎？」",
+    "一律使用繁體中文，語氣友善、段落簡潔、重點清楚。"
   ].join("\n");
 }
 
@@ -101,8 +102,8 @@ async function callGemini(message, chunks) {
         }
       ],
       generationConfig: {
-        temperature: 0.2,
-        maxOutputTokens: 360
+        temperature: 0.55,
+        maxOutputTokens: 640
       }
     })
   });
@@ -144,10 +145,9 @@ module.exports = async function handler(req, res) {
     return;
   }
 
-  const chunks = retrieveChunks(message);
+  let chunks = retrieveChunks(message);
   if (!chunks.length) {
-    res.status(200).json({ answer: OUT_OF_SCOPE, source: "scope_guard" });
-    return;
+    chunks = (knowledge.chunks || []).slice(0, 6);
   }
 
   try {
