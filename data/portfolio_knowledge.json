@@ -1,0 +1,74 @@
+{
+  "profile": {
+    "name": "陳勇學",
+    "email": "d3332565@gmail.com",
+    "targetRoles": [
+      "AI 流程優化專案",
+      "產品 / 軟體專案管理",
+      "活動企劃 / 創業專案"
+    ],
+    "outOfScopeAnswer": "這不在我能回答的範圍內。請問還有什麼想要諮詢的嗎？"
+  },
+  "chunks": [
+    {
+      "id": "profile-positioning",
+      "title": "履歷定位",
+      "keywords": ["陳勇學", "履歷", "自我介紹", "職涯", "定位", "優勢", "強項", "能力", "適合", "面試"],
+      "content": "陳勇學的履歷定位聚焦政府專案執行、活動企劃、品牌行銷、AI 自動化導入與產品 / 軟體專案協作。目標職務可朝 AI 流程優化專案、產品專案管理、軟體專案管理、活動企劃與創業專案執行發展。"
+    },
+    {
+      "id": "locus-anton-base",
+      "title": "聯經數位與安東青創基地",
+      "keywords": ["聯經", "聯經數位", "安東", "青創基地", "政府", "標案", "kpi", "核銷", "成果報告", "基地營運"],
+      "content": "主要工作經驗為聯經數位股份有限公司，負責桃園安東青創基地 113、114 年政府計畫。工作內容包含計畫書撰寫、KPI 追蹤、活動規劃、對外協調、成果報告、核銷資料整理、基地營運與對外接待。"
+    },
+    {
+      "id": "event-planning-results",
+      "title": "活動企劃成果",
+      "keywords": ["企劃", "活動", "活動企劃", "接待", "參訪", "講座", "Accupass", "1690", "滿意度", "服務人次"],
+      "content": "具備企劃書撰寫、活動規劃、KPI 追蹤、對外協調、成果報告與核銷資料整理能力。安東青創基地成果包含 Accupass 追蹤成長 1,690%、累計服務 10,000+ 人次、95%+ 活動滿意度，並統籌 20 組以上海內外產官學研參訪流程。"
+    },
+    {
+      "id": "automation-workflows",
+      "title": "AI 與 n8n 自動化",
+      "keywords": ["自動化", "AI", "n8n", "workflow", "流程", "效率", "SOP", "Webhook", "HTTP Request", "Gemini", "OpenAI", "Claude", "Telegram"],
+      "content": "具備實務流程優化與 AI 自動化導入經驗。自建 4 套 n8n 工作流，整合 Claude / OpenAI / Gemini API、HTTP Request、Webhook 與 Google 服務，包含資料蒐集與結構化、FB 社群爬蟲與 AI 情緒分析週報、Telegram AI Agent、文件與報表輔助流程。"
+    },
+    {
+      "id": "automation-business-value",
+      "title": "流程優化價值",
+      "keywords": ["流程優化", "行政效率", "報表", "文書", "SOP", "省時", "30%", "自動化導入", "行政"],
+      "content": "行政效能優化重點包含每月績效報表、預算核銷、跨單位公文溝通與常規文書流程。透過 SOP 建立與 AI 工具導入，將重複行政庶務效率化，節省 30% 以上作業時間。"
+    },
+    {
+      "id": "wecosplay-product",
+      "title": "WeCosplay 產品與網站專案",
+      "keywords": ["WeCosplay", "網站", "產品", "全端", "電商", "Next.js", "TypeScript", "MongoDB", "Vercel", "API", "PM", "專案經理", "軟體"],
+      "content": "具備產品需求拆解、頁面流程規劃、功能驗收與開發協作能力。WeCosplay 是以 AI 協作完成的全端電商平台展示，技術與作品內容包含 Next.js、TypeScript、MongoDB、Vercel、90+ API 路由、13 個後台管理模組、3 語系與 CI/CD 部署概念。"
+    },
+    {
+      "id": "development-tools",
+      "title": "產品與開發協作工具",
+      "keywords": ["HTML", "CSS", "JavaScript", "Node.js", "Cursor", "開發", "除錯", "軟體", "前端", "後端", "工具"],
+      "content": "產品與開發協作工具包含 HTML、CSS、JavaScript、Node.js 基礎應用、Cursor 網頁邏輯與除錯、GitHub / Vercel 部署概念。可用工程師較容易理解的語言溝通需求、錯誤狀況與功能驗收條件。"
+    },
+    {
+      "id": "communication-collaboration",
+      "title": "溝通協調與專案推進",
+      "keywords": ["溝通", "協調", "跨部門", "合作", "廠商", "主管機關", "講師", "新創", "時程", "專案管理"],
+      "content": "具備政府專案、活動現場與基地營運溝通協調經驗，可對接主管機關、合作單位、講師、新創團隊、參訪團體與現場人員。適合需要需求整理、時程推進、跨單位協調與成果追蹤的企劃或產品專案角色。"
+    },
+    {
+      "id": "marketing-growth",
+      "title": "品牌行銷與平台成長",
+      "keywords": ["品牌", "行銷", "社群", "Accupass", "成長", "曝光", "平台", "粉絲", "主辦單位"],
+      "content": "具備品牌行銷與平台經營經驗。安東青創基地 Accupass 平台營運一年內達成追蹤成長 1,690%，基地獲選為 Accupass 前十大主辦單位，並透過活動內容、合作曝光與平台經營提升品牌觸及。"
+    },
+    {
+      "id": "contact",
+      "title": "聯絡方式",
+      "keywords": ["聯絡", "email", "信箱", "寄信", "面試邀約", "聯繫"],
+      "content": "聯絡信箱為 d3332565@gmail.com。面試情境建議優先詢問活動企劃、AI 流程優化、WeCosplay 產品協作與政府專案執行經驗。"
+    }
+  ]
+}

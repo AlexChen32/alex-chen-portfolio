@@ -1,0 +1,2003 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="陳勇學 Alex 的 3D 星空作品集：以三顆星球呈現自動化、網站與活動企劃作品，點擊星球由看板娘逐字導覽專案亮點。">
+  <title>陳勇學 Alex | 3D 星空作品集</title>
+  <style>
+    :root {
+      --bg: #020611;
+      --ink: #f8fbff;
+      --muted: rgba(224, 236, 255, 0.72);
+      --line: rgba(255, 255, 255, 0.16);
+      --panel: rgba(8, 14, 32, 0.62);
+      --panel-strong: rgba(11, 18, 39, 0.82);
+      --cyan: #55ddff;
+      --violet: #b18cff;
+      --gold: #ffd36b;
+      --green: #5df2bc;
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.36);
+      --title-font: "Noto Serif TC", "PMingLiU", "Microsoft JhengHei", serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 8% 78%, rgba(88, 46, 180, 0.34), transparent 0 26%),
+        radial-gradient(circle at 72% 18%, rgba(34, 137, 255, 0.24), transparent 0 30%),
+        radial-gradient(circle at 48% 42%, rgba(88, 36, 156, 0.16), transparent 0 34%),
+        radial-gradient(circle at 88% 60%, rgba(14, 207, 190, 0.13), transparent 0 26%),
+        var(--bg);
+      color: var(--ink);
+      font-family: "Noto Sans TC", "Microsoft JhengHei", Arial, sans-serif;
+      letter-spacing: 0;
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    body::before {
+      z-index: 1;
+      background:
+        radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.82) 0 1px, transparent 1.7px),
+        radial-gradient(circle at 70% 20%, rgba(98, 198, 255, 0.62) 0 1px, transparent 1.6px),
+        radial-gradient(circle at 40% 82%, rgba(255, 207, 138, 0.48) 0 1px, transparent 1.5px),
+        linear-gradient(128deg, transparent 0 32%, rgba(75, 134, 255, 0.11) 43%, rgba(163, 86, 255, 0.12) 54%, transparent 70%);
+      background-size: 170px 130px, 260px 210px, 380px 290px, 100% 100%;
+      opacity: 0.78;
+    }
+
+    body::after {
+      z-index: 3;
+      background:
+        radial-gradient(circle at 50% 42%, transparent 0 42%, rgba(2, 6, 17, 0.34) 72%, rgba(2, 6, 17, 0.72) 100%),
+        linear-gradient(0deg, rgba(2, 6, 17, 0.90), transparent 24%, transparent 80%, rgba(2, 6, 17, 0.48));
+    }
+
+    canvas#scene {
+      position: fixed;
+      inset: 0;
+      z-index: 2;
+      display: block;
+      width: 100%;
+      height: 100%;
+      outline: none;
+    }
+
+    .shell {
+      position: fixed;
+      inset: 0;
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    .topbar {
+      position: absolute;
+      top: 34px;
+      left: 0;
+      right: 0;
+      display: block;
+      text-align: center;
+    }
+
+    .brand {
+      width: min(740px, calc(100vw - 48px));
+      margin: 0 auto;
+      pointer-events: auto;
+    }
+
+    .back-link {
+      position: fixed;
+      left: 24px;
+      top: 22px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 34px;
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(5, 12, 28, 0.48);
+      color: rgba(247, 251, 255, 0.88);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 800;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+    }
+
+    .brand h1 {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 18px;
+      margin: 0 0 12px;
+      font-family: var(--title-font);
+      font-size: clamp(30px, 2.8vw, 44px);
+      line-height: 1.15;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-shadow: 0 0 24px rgba(148, 193, 255, 0.46), 0 16px 46px rgba(0, 0, 0, 0.58);
+      white-space: nowrap;
+    }
+
+    .brand h1::before,
+    .brand h1::after {
+      content: "";
+      width: min(160px, 17vw);
+      height: 1px;
+      background:
+        radial-gradient(circle, rgba(255,255,255,.94) 0 2px, transparent 2.6px),
+        linear-gradient(90deg, transparent, rgba(255,255,255,.62), transparent);
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
+    .brand p {
+      max-width: none;
+      margin: 0 auto;
+      color: rgba(236, 244, 255, 0.80);
+      font-family: var(--title-font);
+      font-size: 15px;
+      line-height: 1.7;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+    }
+
+    .signal {
+      display: none;
+      min-width: 210px;
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(8, 14, 32, 0.48);
+      box-shadow: var(--shadow);
+      color: rgba(247, 251, 255, 0.86);
+      text-align: right;
+      backdrop-filter: blur(16px);
+    }
+
+    .signal strong {
+      display: block;
+      font-size: 13px;
+      letter-spacing: 0.08em;
+    }
+
+    .signal span {
+      display: block;
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .planet-label {
+      position: absolute;
+      z-index: 8;
+      transform: translate(-50%, -50%);
+      min-width: 118px;
+      min-height: 46px;
+      padding: 9px 26px;
+      border: 1px solid color-mix(in srgb, var(--accent) 64%, rgba(255, 255, 255, 0.28));
+      border-radius: 15px;
+      background: color-mix(in srgb, var(--accent) 10%, rgba(4, 12, 27, 0.58));
+      box-shadow:
+        0 16px 44px rgba(0, 0, 0, 0.26),
+        inset 0 0 18px rgba(255, 255, 255, 0.05);
+      color: #fff;
+      cursor: pointer;
+      pointer-events: auto;
+      text-align: center;
+      backdrop-filter: blur(14px);
+      transition: opacity 180ms ease, transform 180ms ease, border-color 180ms ease, background 180ms ease;
+    }
+
+    .planet-label strong {
+      display: block;
+      font-family: var(--title-font);
+      font-size: 25px;
+      line-height: 1.2;
+      font-weight: 650;
+      letter-spacing: 0.08em;
+      color: color-mix(in srgb, var(--accent) 72%, white);
+      text-shadow: 0 0 18px color-mix(in srgb, var(--accent) 64%, transparent);
+    }
+
+    .planet-label span {
+      display: block;
+      margin-top: 3px;
+      color: rgba(224, 236, 255, 0.66);
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .planet-label.active {
+      border-color: color-mix(in srgb, var(--accent) 72%, white);
+      background: color-mix(in srgb, var(--accent) 18%, rgba(5, 10, 24, 0.72));
+      transform: translate(-50%, -50%) scale(1.06);
+    }
+
+    .planet-label.hover {
+      border-color: color-mix(in srgb, var(--accent) 74%, white);
+      background: color-mix(in srgb, var(--accent) 16%, rgba(5, 10, 24, 0.70));
+      transform: translate(-50%, -50%) scale(1.08);
+    }
+
+    .dock {
+      position: absolute;
+      left: 50%;
+      bottom: 24px;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      pointer-events: auto;
+    }
+
+    .dock button {
+      min-height: 44px;
+      padding: 0 16px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(8, 14, 32, 0.54);
+      color: rgba(247, 251, 255, 0.82);
+      box-shadow: 0 12px 34px rgba(0, 0, 0, 0.24);
+      font: inherit;
+      font-size: 13px;
+      font-weight: 900;
+      cursor: pointer;
+      backdrop-filter: blur(14px);
+      transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
+    }
+
+    .dock button:hover,
+    .dock button.active {
+      transform: translateY(-2px);
+      border-color: color-mix(in srgb, var(--accent) 62%, white);
+      background: color-mix(in srgb, var(--accent) 16%, rgba(8, 14, 32, 0.68));
+    }
+
+    .guide {
+      position: absolute;
+      right: 18px;
+      bottom: 40px;
+      width: min(420px, calc(100vw - 36px));
+      min-height: 245px;
+      display: grid;
+      grid-template-columns: 112px 1fr;
+      gap: 12px;
+      align-items: end;
+      opacity: 0;
+      transform: translateY(22px);
+      pointer-events: none;
+      transition: opacity 220ms ease, transform 220ms ease;
+    }
+
+    .guide.on {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .mascot {
+      position: relative;
+      align-self: end;
+      height: 252px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      filter: drop-shadow(0 24px 28px rgba(0, 0, 0, 0.36));
+    }
+
+    .mascot::before {
+      content: "";
+      position: absolute;
+      width: 124px;
+      height: 124px;
+      bottom: 10px;
+      border-radius: 50%;
+      background: radial-gradient(circle, color-mix(in srgb, var(--accent) 34%, transparent), transparent 70%);
+      filter: blur(16px);
+    }
+
+    .mascot img {
+      position: relative;
+      z-index: 1;
+      max-width: 132px;
+      max-height: 250px;
+      object-fit: contain;
+    }
+
+    .bubble {
+      position: relative;
+      min-height: 214px;
+      padding: 20px 20px 18px;
+      border: 1px solid color-mix(in srgb, var(--accent) 50%, rgba(255,255,255,.25));
+      border-radius: 15px;
+      background:
+        linear-gradient(145deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.035)),
+        rgba(7, 14, 34, 0.72);
+      box-shadow: var(--shadow), inset 0 0 36px color-mix(in srgb, var(--accent) 13%, transparent);
+      backdrop-filter: blur(18px);
+      transform: none;
+    }
+
+    .bubble::before {
+      content: "";
+      position: absolute;
+      left: -9px;
+      bottom: 52px;
+      width: 18px;
+      height: 18px;
+      transform: rotate(45deg);
+      border-left: 1px solid color-mix(in srgb, var(--accent) 32%, var(--line));
+      border-bottom: 1px solid color-mix(in srgb, var(--accent) 32%, var(--line));
+      background: rgba(11, 18, 39, 0.86);
+    }
+
+    .bubble .meta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      color: color-mix(in srgb, var(--accent) 82%, white);
+      font-size: 12px;
+      font-weight: 950;
+      letter-spacing: 0.04em;
+    }
+
+    .bubble .meta::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 18px var(--accent);
+    }
+
+    .bubble h2 {
+      margin: 0 0 8px;
+      font-size: 24px;
+      line-height: 1.24;
+      letter-spacing: 0;
+    }
+
+    .type-text {
+      min-height: 74px;
+      margin: 0;
+      color: rgba(238, 246, 255, 0.84);
+      font-size: 14px;
+      line-height: 1.8;
+      font-weight: 650;
+    }
+
+    .type-text::after {
+      content: "";
+      display: inline-block;
+      width: 7px;
+      height: 1.15em;
+      margin-left: 3px;
+      transform: translateY(3px);
+      background: color-mix(in srgb, var(--accent) 78%, white);
+      animation: caret 900ms steps(2, end) infinite;
+    }
+
+    .wins {
+      display: grid;
+      gap: 8px;
+      margin: 12px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .wins li {
+      display: flex;
+      gap: 8px;
+      color: rgba(247, 251, 255, 0.86);
+      font-size: 13px;
+      line-height: 1.55;
+      font-weight: 750;
+    }
+
+    .wins li::before {
+      content: "";
+      flex: 0 0 7px;
+      width: 7px;
+      height: 7px;
+      margin-top: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 14px var(--accent);
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .actions a {
+      min-height: 34px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 12px;
+      border: 1px solid color-mix(in srgb, var(--accent) 36%, var(--line));
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      color: #fff;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .hint {
+      position: absolute;
+      left: 50%;
+      bottom: 64px;
+      transform: translateX(-50%);
+      width: min(380px, calc(100vw - 48px));
+      padding: 34px 16px 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      color: rgba(247, 251, 255, 0.74);
+      text-align: center;
+      font-size: 13px;
+      font-weight: 800;
+      pointer-events: none;
+      backdrop-filter: none;
+      box-shadow: none;
+      transition: opacity 180ms ease;
+    }
+
+    .hint.hide { opacity: 0; }
+
+    .hint::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 0;
+      width: 22px;
+      height: 36px;
+      transform: translateX(-50%);
+      border: 2px solid rgba(255, 255, 255, 0.72);
+      border-radius: 999px;
+    }
+
+    .hint::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 9px;
+      width: 3px;
+      height: 9px;
+      transform: translateX(-50%);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.72);
+    }
+
+    .project-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 30;
+      display: grid;
+      place-items: center;
+      padding: 28px;
+      background:
+        radial-gradient(circle at 32% 24%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 0 34%),
+        rgba(1, 5, 15, 0.72);
+      opacity: 0;
+      pointer-events: none;
+      backdrop-filter: blur(14px);
+      transition: opacity 180ms ease;
+    }
+
+    .project-modal.on {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-card {
+      position: relative;
+      width: min(1120px, calc(100vw - 44px));
+      max-height: min(760px, calc(100vh - 44px));
+      display: grid;
+      grid-template-columns: minmax(0, 1.42fr) minmax(260px, 0.78fr);
+      gap: 20px;
+      padding: 24px;
+      border: 1px solid color-mix(in srgb, var(--accent) 42%, rgba(255,255,255,.24));
+      border-radius: 22px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,.12), rgba(255,255,255,.035)),
+        rgba(6, 12, 30, 0.88);
+      box-shadow:
+        0 34px 110px rgba(0, 0, 0, 0.62),
+        inset 0 0 60px color-mix(in srgb, var(--accent) 13%, transparent);
+      overflow: hidden auto;
+      transform: translateY(18px) scale(0.96);
+      transition: transform 220ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .project-modal.on .modal-card {
+      transform: translateY(0) scale(1);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      z-index: 2;
+      width: 38px;
+      height: 38px;
+      border: 1px solid rgba(255,255,255,.22);
+      border-radius: 999px;
+      background: rgba(255,255,255,.08);
+      color: #fff;
+      cursor: pointer;
+      font-size: 24px;
+      line-height: 1;
+    }
+
+    .modal-content {
+      min-width: 0;
+      padding-right: 10px;
+    }
+
+    .modal-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+      color: color-mix(in srgb, var(--accent) 76%, white);
+      font-size: 13px;
+      font-weight: 950;
+    }
+
+    .modal-kicker::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 18px var(--accent);
+    }
+
+    .modal-content h2 {
+      margin: 0;
+      font-family: var(--title-font);
+      font-size: clamp(28px, 3vw, 42px);
+      line-height: 1.18;
+      letter-spacing: 0.06em;
+    }
+
+    .modal-intro {
+      max-width: 680px;
+      margin: 14px 0 0;
+      color: rgba(237, 246, 255, 0.78);
+      font-size: 15px;
+      line-height: 1.85;
+      font-weight: 650;
+    }
+
+    .modal-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .modal-stats span {
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      padding: 0 12px;
+      border: 1px solid color-mix(in srgb, var(--accent) 34%, rgba(255,255,255,.18));
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--accent) 12%, rgba(255,255,255,.05));
+      color: rgba(255,255,255,.90);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .section-preview {
+      display: grid;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .preview-item {
+      display: grid;
+      gap: 6px;
+      padding: 14px 15px;
+      border: 1px solid rgba(255,255,255,.13);
+      border-radius: 14px;
+      background: rgba(255,255,255,.055);
+    }
+
+    .preview-item strong {
+      color: #fff;
+      font-size: 15px;
+      line-height: 1.45;
+    }
+
+    .preview-item span {
+      color: rgba(226, 238, 255, 0.70);
+      font-size: 13px;
+      line-height: 1.65;
+      font-weight: 650;
+    }
+
+    .modal-index-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      margin-top: 18px;
+      padding: 0 16px;
+      border: 1px solid color-mix(in srgb, var(--accent) 58%, rgba(255,255,255,.22));
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--accent) 18%, rgba(255,255,255,.06));
+      color: #fff;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 950;
+    }
+
+    .modal-assistant {
+      display: grid;
+      align-content: end;
+      gap: 12px;
+      min-width: 0;
+      padding: 22px 16px 0;
+      border-left: 1px solid rgba(255,255,255,.10);
+    }
+
+    .modal-assistant-img {
+      justify-self: center;
+      width: min(188px, 56%);
+      filter: drop-shadow(0 22px 28px rgba(0,0,0,.45));
+    }
+
+    .assistant-card {
+      position: relative;
+      padding: 18px;
+      border: 1px solid color-mix(in srgb, var(--accent) 42%, rgba(255,255,255,.20));
+      border-radius: 18px;
+      background: rgba(9, 17, 39, 0.78);
+      box-shadow: inset 0 0 42px color-mix(in srgb, var(--accent) 10%, transparent);
+    }
+
+    .assistant-card strong {
+      display: block;
+      margin-bottom: 8px;
+      color: color-mix(in srgb, var(--accent) 72%, white);
+      font-size: 13px;
+      font-weight: 950;
+    }
+
+    .assistant-card p {
+      margin: 0;
+      color: rgba(241, 247, 255, 0.84);
+      font-size: 14px;
+      line-height: 1.8;
+      font-weight: 700;
+    }
+
+    @keyframes caret {
+      0%, 45% { opacity: 1; }
+      46%, 100% { opacity: 0; }
+    }
+
+    @media (max-width: 860px) {
+      .topbar {
+        top: 58px;
+        left: 0;
+        right: auto;
+        width: 100%;
+        transform: none;
+        display: block;
+      }
+
+      .brand {
+        width: min(360px, calc(100vw - 28px));
+      }
+
+      .back-link {
+        left: 14px;
+        top: 14px;
+        min-height: 32px;
+        font-size: 12px;
+      }
+
+      .brand h1 {
+        margin-top: 0;
+        max-width: none;
+        gap: 8px;
+        font-size: 27px;
+        letter-spacing: 0.16em;
+      }
+
+      .brand h1::before,
+      .brand h1::after {
+        width: 42px;
+      }
+
+      .brand p {
+        max-width: none;
+        font-size: 12px;
+        line-height: 1.6;
+        letter-spacing: 0.08em;
+      }
+
+      .signal {
+        display: none;
+      }
+
+      .planet-label {
+        min-width: 88px;
+        min-height: 38px;
+        padding: 7px 12px;
+        border-radius: 13px;
+      }
+
+      .planet-label strong {
+        font-size: 16px;
+      }
+
+      .planet-label span {
+        display: none;
+      }
+
+      .dock {
+        left: 12px;
+        right: 12px;
+        bottom: 10px;
+        transform: none;
+        justify-content: center;
+        gap: 6px;
+      }
+
+      .dock button {
+        flex: 1;
+        min-height: 40px;
+        padding: 0 8px;
+        font-size: 12px;
+      }
+
+      .guide {
+        left: 12px;
+        right: 12px;
+        bottom: 62px;
+        width: auto;
+        min-height: 0;
+        grid-template-columns: 78px 1fr;
+        gap: 8px;
+      }
+
+      .mascot {
+        height: 146px;
+      }
+
+      .mascot img {
+        max-width: 82px;
+        max-height: 146px;
+      }
+
+      .bubble {
+        min-height: 166px;
+        padding: 14px 14px 12px;
+        border-radius: 18px;
+        transform: none;
+      }
+
+      .bubble h2 {
+        font-size: 18px;
+      }
+
+      .type-text {
+        min-height: 64px;
+        font-size: 12px;
+        line-height: 1.65;
+      }
+
+      .wins {
+        gap: 5px;
+      }
+
+      .wins li {
+        font-size: 11px;
+        line-height: 1.45;
+      }
+
+      .actions {
+        display: none;
+      }
+
+      .hint {
+        display: none;
+      }
+
+      .project-modal {
+        padding: 12px;
+        align-items: start;
+        overflow: auto;
+      }
+
+      .modal-card {
+        width: 100%;
+        max-height: none;
+        grid-template-columns: 1fr;
+        gap: 14px;
+        padding: 18px;
+        margin: 72px 0 18px;
+        border-radius: 18px;
+      }
+
+      .modal-content {
+        padding-right: 0;
+      }
+
+      .modal-assistant {
+        grid-template-columns: 78px 1fr;
+        align-items: end;
+        padding: 10px 0 0;
+        border-left: 0;
+        border-top: 1px solid rgba(255,255,255,.10);
+      }
+
+      .modal-assistant-img {
+        width: 76px;
+      }
+
+      .assistant-card {
+        padding: 14px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .type-text::after { animation: none; }
+      .guide,
+      .planet-label,
+      .dock button { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="scene" aria-label="3D 星空作品集場景"></canvas>
+
+  <div class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <a class="back-link" href="index.html">返回作品集首頁</a>
+        <h1>陳勇學作品集</h1>
+        <p>點擊星球，探索我的專案與成就</p>
+      </div>
+      <div class="signal" aria-live="polite">
+        <strong id="signalTitle">星球導覽待命</strong>
+        <span id="signalText">選擇一顆星球後，會顯示對應專案成就。</span>
+      </div>
+    </header>
+
+    <button class="planet-label" id="label-automation" type="button" data-project="automation" style="--accent: var(--cyan)">
+      <strong>自動化</strong><span>AI / n8n / SOP</span>
+    </button>
+    <button class="planet-label" id="label-website" type="button" data-project="website" style="--accent: var(--violet)">
+      <strong>網站</strong><span>產品與全端協作</span>
+    </button>
+    <button class="planet-label" id="label-event" type="button" data-project="event" style="--accent: var(--green)">
+      <strong>活動企劃</strong><span>基地營運與品牌成長</span>
+    </button>
+
+    <div class="dock" aria-label="星球快速選單">
+      <button type="button" data-project="automation" style="--accent: var(--cyan)">自動化</button>
+      <button type="button" data-project="website" style="--accent: var(--violet)">網站</button>
+      <button type="button" data-project="event" style="--accent: var(--green)">活動企劃</button>
+    </div>
+
+    <aside class="guide on" id="guide" aria-live="polite" style="--accent: var(--cyan)">
+      <div class="mascot">
+        <img src="images_web/看板娘_cutout.png" alt="黑色短髮 Q 版看板娘">
+      </div>
+      <div class="bubble">
+        <div class="meta" id="guideMeta">助手</div>
+        <h2 id="guideTitle">星球導覽開始</h2>
+        <p class="type-text" id="guideText"></p>
+        <ul class="wins" id="wins"></ul>
+        <div class="actions" id="actions"></div>
+      </div>
+    </aside>
+
+    <div class="hint" id="hint">點擊任一星球，讓看板娘開始導覽。</div>
+  </div>
+
+  <section class="project-modal" id="projectModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="modalTitle" style="--accent: var(--cyan)">
+    <div class="modal-card">
+      <button class="modal-close" id="modalClose" type="button" aria-label="關閉專案視窗">×</button>
+      <div class="modal-content">
+        <span class="modal-kicker" id="modalKicker">對應作品集區段</span>
+        <h2 id="modalTitle">專案成就</h2>
+        <p class="modal-intro" id="modalIntro"></p>
+        <div class="modal-stats" id="modalStats"></div>
+        <div class="section-preview" id="modalPreview"></div>
+        <a class="modal-index-link" id="modalIndexLink" href="index.html">前往 index 對應區段</a>
+      </div>
+      <aside class="modal-assistant">
+        <img class="modal-assistant-img" src="images_web/看板娘_cutout.png" alt="黑色短髮 Q 版助手">
+        <div class="assistant-card">
+          <strong>助手說明</strong>
+          <p id="modalAssistantText"></p>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script>
+    const projects = {
+      automation: {
+        name: "自動化",
+        meta: "AI / n8n / SOP",
+        accent: "#55ddff",
+        position: [-3.42, 0.32, -0.75],
+        radius: 1.58,
+        labelOffset: -1.86,
+        texture: "automation",
+        title: "自動化流程星球",
+        signal: "AI 流程優化與行政效率",
+        guide: "具備重複行政流程拆解、報表整理、專案文件 SOP 化與 AI 工具導入經驗。能先定義流程、輸入輸出與檢核點，再讓工具協助產出與追蹤。",
+        wins: [
+          "將報表、核銷、會議紀錄整理為 SOP",
+          "以 AI 工具輔助文件初稿、摘要與資料彙整",
+          "重複行政作業節省 30%+ 時間"
+        ],
+        modal: {
+          sectionLabel: "index.html｜Workflow 自動化",
+          heading: "自動化流程與 AI 行政優化",
+          intro: "Workflow 自動化作品重點呈現行政、社群分析、標案文件與報表流程拆解，並整理成可重複執行的工作流。",
+          stats: ["4 套 n8n 工作流", "30%+ 重複工時節省", "AI 文件產出", "SOP 建立"],
+          items: [
+            { title: "n8n 工作流自動化", desc: "整合 Claude / OpenAI / Gemini API、HTTP Request、Webhook 與 Google 服務，讓資料蒐集與週報產出更穩定。" },
+            { title: "政府標案 AI Skill 地圖", desc: "把投標、執行、KPI、結案報告拆成可被 AI 協助的節點，形成可複用的文件產出方法。" },
+            { title: "多模型互審流程", desc: "透過不同 AI 工具交叉審查，降低單一模型漏看問題的風險，提升文件與網站產出品質。" }
+          ],
+          indexHref: "index.html#software",
+          assistant: "具備流程拆解、輸入輸出定義、SOP 建立與 AI / n8n 導入能力，可將重複工作整理成穩定、可追蹤的作業流程。"
+        },
+        links: [
+          { label: "查看 n8n 作品圖", href: "images/n8n_workflow_1.png" }
+        ]
+      },
+      website: {
+        name: "網站",
+        meta: "產品 / 全端 / 上線",
+        accent: "#b18cff",
+        position: [0.02, -0.48, -1.35],
+        radius: 1.50,
+        labelOffset: -1.78,
+        texture: "website",
+        title: "網站產品星球",
+        signal: "WeCosplay 與產品落地能力",
+        guide: "具備網站產品管理與開發協作經驗，能將模糊想法拆解為需求、功能、驗收條件與上線成果，並使用工程端可理解的語言溝通。",
+        wins: [
+          "完成 WeCosplay 全端電商平台展示",
+          "涵蓋會員、商品、訂單與後台管理流程",
+          "能用 PRD、測試驗收與部署思維推動產品"
+        ],
+        modal: {
+          sectionLabel: "index.html｜網站製作",
+          heading: "WeCosplay 全端電商平台",
+          intro: "網站製作作品重點呈現產品想法拆解、功能規劃、頁面流程、後台管理與可上線成果。",
+          stats: ["90+ API", "13 後台模組", "3 語系", "CI/CD 部署"],
+          items: [
+            { title: "產品需求拆解", desc: "從租借、商品、會員、訂單到後台管理，整理成可以執行與驗收的功能範圍。" },
+            { title: "全端協作與上線", desc: "使用 Next.js、TypeScript、MongoDB、Vercel 完成網站展示，並能理解工程端溝通語言。" },
+            { title: "專案管理視角", desc: "以 PRD、測試驗收、部署與問題修復的方式推進，重點是讓產品真的可以被看見、被操作。" }
+          ],
+          indexHref: "index.html#software",
+          assistant: "具備產品型專案需求拆解、跨角色溝通與交付管理能力；能以工程端可理解的方式討論功能、流程與驗收。"
+        },
+        links: [
+          { label: "WeCosplay", href: "https://we-cosplay.com/" },
+          { label: "線上作品集", href: "https://alex-chen-portfolio-nine.vercel.app/" }
+        ]
+      },
+      event: {
+        name: "活動企劃",
+        meta: "政府專案 / 品牌成長",
+        accent: "#5df2bc",
+        position: [3.36, 0.48, -0.65],
+        radius: 1.52,
+        texture: "event",
+        title: "活動企劃星球",
+        signal: "基地營運、活動企劃與品牌成長",
+        guide: "具備政府專案與活動現場執行經驗，能處理企劃、邀約、接待、KPI 與成果報告，並將活動成果整理為可檢核資料。",
+        wins: [
+          "執行桃園安東青創基地活動與參訪任務",
+          "Accupass 追蹤成長 1,690%，獲選前十大主辦單位",
+          "累計服務 10,000+ 人次並整合 KPI 成果"
+        ],
+        modal: {
+          sectionLabel: "index.html｜活動企劃",
+          heading: "活動企劃與政府專案執行",
+          intro: "活動企劃作品重點呈現安東青創基地計畫中的企劃、邀約、現場執行、接待、KPI 與成果彙整。",
+          stats: ["Accupass 1,690%", "10,000+ 人次", "95%+ 滿意度", "政府標案執行"],
+          items: [
+            { title: "基地營運與年度計畫", desc: "執行桃園安東青創基地 113、114 年計畫，處理活動、參訪、KPI、成果報告與跨單位協調。" },
+            { title: "品牌與平台成長", desc: "透過活動內容、平台經營與合作曝光，讓 Accupass 追蹤數成長 1,690%，並獲選前十大主辦單位。" },
+            { title: "活動現場與接待", desc: "面對產官學研參訪、課程、展覽與外賓導覽，能把流程、腳本、分工與現場應變串起來。" }
+          ],
+          indexHref: "index.html#events",
+          assistant: "具備活動企劃、受眾分析、資源整合、時程預算控管、KPI 追蹤與現場執行能力，能整理成可交付成果。"
+        },
+        links: [
+          { label: "活動企劃作品", href: "index.html#events" }
+        ]
+      }
+    };
+
+    const canvas = document.getElementById("scene");
+    const guide = document.getElementById("guide");
+    const guideMeta = document.getElementById("guideMeta");
+    const guideTitle = document.getElementById("guideTitle");
+    const guideText = document.getElementById("guideText");
+    const wins = document.getElementById("wins");
+    const actions = document.getElementById("actions");
+    const signalTitle = document.getElementById("signalTitle");
+    const signalText = document.getElementById("signalText");
+    const hint = document.getElementById("hint");
+    const labels = Array.from(document.querySelectorAll(".planet-label"));
+    const dockButtons = Array.from(document.querySelectorAll(".dock button"));
+    const projectModal = document.getElementById("projectModal");
+    const modalClose = document.getElementById("modalClose");
+    const modalKicker = document.getElementById("modalKicker");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalIntro = document.getElementById("modalIntro");
+    const modalStats = document.getElementById("modalStats");
+    const modalPreview = document.getElementById("modalPreview");
+    const modalIndexLink = document.getElementById("modalIndexLink");
+    const modalAssistantText = document.getElementById("modalAssistantText");
+
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.outputEncoding = THREE.sRGBEncoding;
+
+    const scene = new THREE.Scene();
+    scene.fog = new THREE.FogExp2(0x030715, 0.035);
+
+    const camera = new THREE.PerspectiveCamera(48, window.innerWidth / window.innerHeight, 0.1, 120);
+    camera.position.set(0, 1.2, isMobile() ? 10.6 : 9.35);
+
+    scene.add(new THREE.AmbientLight(0x8094ff, 0.42));
+
+    const keyLight = new THREE.DirectionalLight(0xffffff, 0.86);
+    keyLight.position.set(-3, 4, 6);
+    scene.add(keyLight);
+
+    const rimLight = new THREE.PointLight(0x75e9ff, 2.35, 24);
+    rimLight.position.set(3.8, 2.6, 4.6);
+    scene.add(rimLight);
+
+    const warmLight = new THREE.PointLight(0xffbd75, 1.12, 20);
+    warmLight.position.set(-5.6, -0.5, 3.5);
+    scene.add(warmLight);
+
+    function isMobile() {
+      return window.innerWidth <= 860;
+    }
+
+    function makeSeededRandom(seedText) {
+      let seed = 2166136261;
+      for (let i = 0; i < seedText.length; i++) {
+        seed ^= seedText.charCodeAt(i);
+        seed = Math.imul(seed, 16777619);
+      }
+      return function rand() {
+        seed += 0x6D2B79F5;
+        let t = seed;
+        t = Math.imul(t ^ (t >>> 15), t | 1);
+        t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+      };
+    }
+
+    function makePlanetTexture(type, accent) {
+      const c = document.createElement("canvas");
+      c.width = 1024;
+      c.height = 512;
+      const g = c.getContext("2d");
+      const rand = makeSeededRandom(type);
+      const grd = g.createLinearGradient(0, 0, 1024, 512);
+
+      if (type === "automation") {
+        grd.addColorStop(0, "#020717");
+        grd.addColorStop(0.44, "#07466b");
+        grd.addColorStop(0.72, "#0b203f");
+        grd.addColorStop(1, "#01030a");
+      } else if (type === "website") {
+        grd.addColorStop(0, "#10021f");
+        grd.addColorStop(0.44, "#3a155d");
+        grd.addColorStop(0.68, "#7a2d57");
+        grd.addColorStop(1, "#07020d");
+      } else {
+        grd.addColorStop(0, "#04110a");
+        grd.addColorStop(0.42, "#15582f");
+        grd.addColorStop(0.66, "#235923");
+        grd.addColorStop(1, "#020705");
+      }
+
+      g.fillStyle = grd;
+      g.fillRect(0, 0, 1024, 512);
+
+      const deepShade = g.createRadialGradient(270, 112, 28, 620, 288, 760);
+      deepShade.addColorStop(0, "rgba(255,255,255,0.10)");
+      deepShade.addColorStop(0.34, "rgba(255,255,255,0)");
+      deepShade.addColorStop(0.72, "rgba(0,0,0,0.22)");
+      deepShade.addColorStop(1, "rgba(0,0,0,0.62)");
+      g.fillStyle = deepShade;
+      g.fillRect(0, 0, 1024, 512);
+
+      for (let i = 0; i < 1800; i++) {
+        const x = rand() * 1024;
+        const y = rand() * 512;
+        const a = rand() * (type === "website" ? 0.12 : 0.09);
+        g.fillStyle = `rgba(255,255,255,${a})`;
+        g.fillRect(x, y, rand() * 2.2, rand() * 2.2);
+      }
+
+      g.save();
+      g.globalCompositeOperation = "lighter";
+      g.lineCap = "round";
+      g.lineJoin = "round";
+
+      for (let i = 0; i < 7; i++) {
+        const y = 58 + i * 58 + rand() * 14;
+        g.strokeStyle = type === "event"
+          ? "rgba(255, 212, 99, 0.18)"
+          : type === "website"
+            ? "rgba(212, 119, 255, 0.18)"
+            : "rgba(82, 223, 255, 0.22)";
+        g.lineWidth = 1.2 + rand() * 1.6;
+        g.beginPath();
+        for (let x = 0; x <= 1024; x += 32) {
+          const wave = Math.sin(x * 0.012 + i * 0.9) * (12 + i * 0.8);
+          if (x === 0) g.moveTo(x, y + wave);
+          else g.lineTo(x, y + wave);
+        }
+        g.stroke();
+      }
+
+      if (type === "automation") {
+        g.shadowColor = "#42e6ff";
+        g.shadowBlur = 16;
+        g.strokeStyle = "rgba(90, 228, 255, 0.84)";
+        g.lineWidth = 3.4;
+        for (let i = 0; i < 38; i++) {
+          const y = 42 + rand() * 420;
+          const x = rand() * 860;
+          const jog = (rand() > 0.5 ? 1 : -1) * (28 + rand() * 58);
+          g.beginPath();
+          g.moveTo(x, y);
+          g.lineTo(x + 54 + rand() * 86, y);
+          g.lineTo(x + 54 + rand() * 86, y + jog);
+          g.lineTo(x + 126 + rand() * 150, y + jog);
+          g.stroke();
+          g.fillStyle = "rgba(189, 248, 255, 0.82)";
+          g.beginPath();
+          g.arc(x, y, 4 + rand() * 3.6, 0, Math.PI * 2);
+          g.fill();
+        }
+
+        g.shadowBlur = 10;
+        g.strokeStyle = "rgba(175, 248, 255, 0.38)";
+        g.lineWidth = 1.4;
+        for (let i = 0; i < 16; i++) {
+          const x = 58 + i * 58 + rand() * 16;
+          g.beginPath();
+          g.moveTo(x, 32);
+          g.lineTo(x + Math.sin(i) * 34, 470);
+          g.stroke();
+        }
+
+        for (let i = 0; i < 22; i++) {
+          const x = rand() * 920 + 26;
+          const y = rand() * 420 + 38;
+          g.strokeStyle = "rgba(107, 230, 255, 0.42)";
+          g.fillStyle = "rgba(20, 91, 137, 0.26)";
+          roundRect(g, x, y, 32 + rand() * 56, 18 + rand() * 30, 6);
+          g.fill();
+          g.stroke();
+        }
+
+        g.shadowBlur = 20;
+        g.strokeStyle = "rgba(102, 236, 255, 0.92)";
+        g.fillStyle = "rgba(102, 236, 255, 0.18)";
+        for (let i = 0; i < 3; i++) {
+          const cx = 310 + i * 78;
+          const cy = 216 + Math.sin(i) * 36;
+          g.beginPath();
+          g.arc(cx, cy, 24 + i * 7, 0, Math.PI * 2);
+          g.stroke();
+          for (let tooth = 0; tooth < 8; tooth++) {
+            const a = tooth / 8 * Math.PI * 2;
+            g.beginPath();
+            g.moveTo(cx + Math.cos(a) * (34 + i * 7), cy + Math.sin(a) * (34 + i * 7));
+            g.lineTo(cx + Math.cos(a) * (48 + i * 7), cy + Math.sin(a) * (48 + i * 7));
+            g.stroke();
+          }
+        }
+      }
+
+      if (type === "website") {
+        g.shadowColor = "#ff9f55";
+        g.shadowBlur = 16;
+        for (let i = 0; i < 90; i++) {
+          const x = rand() * 1000;
+          const y = 210 + rand() * 260;
+          const w = 12 + rand() * 34;
+          const h = 10 + rand() * 30;
+          g.fillStyle = i % 4 === 0 ? "rgba(255, 191, 104, 0.42)" : "rgba(255, 128, 84, 0.24)";
+          roundRect(g, x, y, w, h, 4);
+          g.fill();
+        }
+
+        g.shadowColor = "#c77dff";
+        g.shadowBlur = 12;
+        for (let i = 0; i < 34; i++) {
+          const x = rand() * 930 + 28;
+          const y = rand() * 370 + 54;
+          const w = 70 + rand() * 98;
+          const h = 36 + rand() * 54;
+          g.fillStyle = i % 3 === 0 ? "rgba(255, 160, 91, 0.18)" : "rgba(162, 84, 255, 0.22)";
+          g.strokeStyle = i % 3 === 0 ? "rgba(255, 196, 118, 0.56)" : "rgba(204, 150, 255, 0.48)";
+          roundRect(g, x, y, w, h, 10);
+          g.fill();
+          g.stroke();
+          g.strokeStyle = "rgba(255,255,255,0.28)";
+          g.lineWidth = 1.2;
+          g.beginPath();
+          g.moveTo(x + 14, y + 16);
+          g.lineTo(x + w - 16, y + 16);
+          g.moveTo(x + 14, y + 31);
+          g.lineTo(x + 34 + rand() * (w - 52), y + 31);
+          g.stroke();
+        }
+
+        g.shadowBlur = 0;
+        g.strokeStyle = "rgba(255, 187, 103, 0.42)";
+        g.lineWidth = 2;
+        for (let i = 0; i < 12; i++) {
+          g.beginPath();
+          g.ellipse(512, 270, 510, 54 + i * 18, (rand() - 0.5) * 0.28, 0, Math.PI * 2);
+          g.stroke();
+        }
+      }
+
+      if (type === "event") {
+        g.shadowColor = "#ffd36b";
+        g.shadowBlur = 14;
+        for (let i = 0; i < 22; i++) {
+          const y = 36 + i * 22;
+          g.strokeStyle = `rgba(255, 215, 111, ${0.20 + rand() * 0.22})`;
+          g.lineWidth = 1.8 + rand() * 2;
+          g.beginPath();
+          for (let x = 0; x <= 1024; x += 40) {
+            const wave = Math.sin(x * 0.012 + i) * 14;
+            if (x === 0) g.moveTo(x, y + wave);
+            else g.lineTo(x, y + wave);
+          }
+          g.stroke();
+        }
+
+        for (let i = 0; i < 140; i++) {
+          g.fillStyle = `rgba(255, 226, 129, ${0.28 + rand() * 0.46})`;
+          g.beginPath();
+          g.arc(rand() * 1024, rand() * 512, 1.6 + rand() * 3.4, 0, Math.PI * 2);
+          g.fill();
+        }
+
+        for (let i = 0; i < 20; i++) {
+          const x = rand() * 930 + 28;
+          const y = rand() * 390 + 54;
+          g.strokeStyle = "rgba(255, 214, 118, 0.46)";
+          g.fillStyle = "rgba(23, 92, 49, 0.34)";
+          roundRect(g, x, y, 46 + rand() * 62, 30 + rand() * 34, 8);
+          g.fill();
+          g.stroke();
+        }
+
+        for (let i = 0; i < 12; i++) {
+          const x = 58 + rand() * 880;
+          const y = 248 + rand() * 180;
+          const w = 34 + rand() * 42;
+          const h = 32 + rand() * 28;
+          g.fillStyle = i % 2 ? "rgba(255, 192, 92, 0.42)" : "rgba(255, 240, 167, 0.30)";
+          g.strokeStyle = "rgba(255, 221, 128, 0.62)";
+          g.beginPath();
+          g.moveTo(x, y + h);
+          g.lineTo(x + w * 0.5, y);
+          g.lineTo(x + w, y + h);
+          g.closePath();
+          g.fill();
+          g.stroke();
+          g.beginPath();
+          g.moveTo(x + w * 0.5, y);
+          g.lineTo(x + w * 0.5, y + h);
+          g.stroke();
+        }
+
+        for (let i = 0; i < 54; i++) {
+          const x = rand() * 1024;
+          const y = rand() * 210;
+          g.fillStyle = ["rgba(255,211,107,0.78)", "rgba(93,242,188,0.58)", "rgba(255,126,95,0.58)"][i % 3];
+          g.fillRect(x, y, 3 + rand() * 7, 3 + rand() * 9);
+        }
+      }
+
+      g.restore();
+
+      const highlight = g.createRadialGradient(230, 112, 12, 230, 112, 230);
+      highlight.addColorStop(0, type === "website" ? "rgba(255,217,180,0.08)" : "rgba(255,255,255,0.11)");
+      highlight.addColorStop(0.42, "rgba(255,255,255,0.025)");
+      highlight.addColorStop(1, "rgba(255,255,255,0)");
+      g.fillStyle = highlight;
+      g.fillRect(0, 0, 1024, 512);
+
+      const rimShade = g.createLinearGradient(0, 0, 1024, 0);
+      rimShade.addColorStop(0, "rgba(255,255,255,0.05)");
+      rimShade.addColorStop(0.52, "rgba(255,255,255,0)");
+      rimShade.addColorStop(1, "rgba(0,0,0,0.40)");
+      g.fillStyle = rimShade;
+      g.fillRect(0, 0, 1024, 512);
+
+      const texture = new THREE.CanvasTexture(c);
+      texture.colorSpace = THREE.SRGBColorSpace;
+      texture.anisotropy = 8;
+      return texture;
+    }
+
+    function roundRect(g, x, y, w, h, r) {
+      g.beginPath();
+      g.moveTo(x + r, y);
+      g.lineTo(x + w - r, y);
+      g.quadraticCurveTo(x + w, y, x + w, y + r);
+      g.lineTo(x + w, y + h - r);
+      g.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+      g.lineTo(x + r, y + h);
+      g.quadraticCurveTo(x, y + h, x, y + h - r);
+      g.lineTo(x, y + r);
+      g.quadraticCurveTo(x, y, x + r, y);
+    }
+
+    function makeGlowTexture() {
+      const c = document.createElement("canvas");
+      c.width = 256;
+      c.height = 256;
+      const g = c.getContext("2d");
+      const grd = g.createRadialGradient(128, 128, 0, 128, 128, 128);
+      grd.addColorStop(0, "rgba(255,255,255,0.72)");
+      grd.addColorStop(0.35, "rgba(255,255,255,0.2)");
+      grd.addColorStop(1, "rgba(255,255,255,0)");
+      g.fillStyle = grd;
+      g.fillRect(0, 0, 256, 256);
+      return new THREE.CanvasTexture(c);
+    }
+
+    function makeOrbitCardTexture(kind, accent, label = "") {
+      const c = document.createElement("canvas");
+      c.width = 384;
+      c.height = 256;
+      const g = c.getContext("2d");
+      const color = accent || "#ffffff";
+
+      g.clearRect(0, 0, c.width, c.height);
+      g.lineWidth = 3;
+      g.strokeStyle = color;
+      g.fillStyle = "rgba(5, 13, 32, 0.52)";
+      roundRect(g, 40, 38, 304, 180, 22);
+      g.fill();
+      g.stroke();
+
+      g.shadowColor = color;
+      g.shadowBlur = 18;
+      g.strokeStyle = color;
+      g.fillStyle = color;
+      g.lineWidth = 6;
+      g.lineCap = "round";
+      g.lineJoin = "round";
+
+      if (kind === "gear") {
+        g.beginPath();
+        g.arc(160, 128, 32, 0, Math.PI * 2);
+        g.stroke();
+        g.beginPath();
+        g.arc(160, 128, 10, 0, Math.PI * 2);
+        g.stroke();
+        for (let i = 0; i < 8; i++) {
+          const a = i / 8 * Math.PI * 2;
+          g.beginPath();
+          g.moveTo(160 + Math.cos(a) * 43, 128 + Math.sin(a) * 43);
+          g.lineTo(160 + Math.cos(a) * 58, 128 + Math.sin(a) * 58);
+          g.stroke();
+        }
+      } else if (kind === "robot") {
+        roundRect(g, 122, 92, 78, 64, 14);
+        g.stroke();
+        g.beginPath();
+        g.arc(144, 122, 5, 0, Math.PI * 2);
+        g.arc(178, 122, 5, 0, Math.PI * 2);
+        g.fill();
+        g.beginPath();
+        g.moveTo(161, 88);
+        g.lineTo(161, 72);
+        g.stroke();
+      } else if (kind === "window") {
+        roundRect(g, 104, 82, 150, 92, 12);
+        g.stroke();
+        g.lineWidth = 3;
+        g.beginPath();
+        g.moveTo(104, 112);
+        g.lineTo(254, 112);
+        g.moveTo(126, 140);
+        g.lineTo(186, 140);
+        g.moveTo(126, 158);
+        g.lineTo(222, 158);
+        g.stroke();
+      } else if (kind === "code") {
+        g.beginPath();
+        g.moveTo(146, 96);
+        g.lineTo(106, 128);
+        g.lineTo(146, 160);
+        g.moveTo(206, 96);
+        g.lineTo(246, 128);
+        g.lineTo(206, 160);
+        g.moveTo(186, 88);
+        g.lineTo(166, 168);
+        g.stroke();
+      } else if (kind === "calendar") {
+        roundRect(g, 112, 82, 132, 112, 14);
+        g.stroke();
+        g.lineWidth = 3;
+        g.beginPath();
+        g.moveTo(112, 116);
+        g.lineTo(244, 116);
+        g.moveTo(145, 72);
+        g.lineTo(145, 96);
+        g.moveTo(211, 72);
+        g.lineTo(211, 96);
+        g.stroke();
+        g.fillRect(138, 138, 18, 18);
+        g.fillRect(170, 138, 18, 18);
+        g.fillRect(202, 138, 18, 18);
+      } else if (kind === "mic") {
+        roundRect(g, 144, 76, 52, 88, 26);
+        g.stroke();
+        g.beginPath();
+        g.arc(170, 132, 56, 0.15 * Math.PI, 0.85 * Math.PI);
+        g.stroke();
+        g.beginPath();
+        g.moveTo(170, 188);
+        g.lineTo(170, 206);
+        g.moveTo(142, 206);
+        g.lineTo(198, 206);
+        g.stroke();
+      } else {
+        g.font = "900 44px Microsoft JhengHei, sans-serif";
+        g.textAlign = "center";
+        g.fillText(label || "UI", 192, 142);
+      }
+
+      g.shadowBlur = 0;
+      if (label) {
+        g.font = "900 26px Microsoft JhengHei, sans-serif";
+        g.textAlign = "center";
+        g.fillText(label, 192, 204);
+      }
+
+      const texture = new THREE.CanvasTexture(c);
+      texture.colorSpace = THREE.SRGBColorSpace;
+      return texture;
+    }
+
+    function addOrbitSprite(group, kind, color, position, scale, label = "") {
+      const sprite = new THREE.Sprite(new THREE.SpriteMaterial({
+        map: makeOrbitCardTexture(kind, color, label),
+        transparent: true,
+        opacity: 0.86,
+        depthWrite: false
+      }));
+      sprite.position.set(position[0], position[1], position[2]);
+      sprite.scale.set(scale[0], scale[1], 1);
+      group.add(sprite);
+      return sprite;
+    }
+
+    function createStarField() {
+      const count = 3200;
+      const positions = new Float32Array(count * 3);
+      const colors = new Float32Array(count * 3);
+      const colorA = new THREE.Color(0x9dc6ff);
+      const colorB = new THREE.Color(0xffffff);
+      const colorC = new THREE.Color(0xffd7a6);
+
+      for (let i = 0; i < count; i++) {
+        const radius = 26 + Math.random() * 48;
+        const theta = Math.random() * Math.PI * 2;
+        const phi = Math.acos(2 * Math.random() - 1);
+        positions[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
+        positions[i * 3 + 1] = radius * Math.cos(phi);
+        positions[i * 3 + 2] = radius * Math.sin(phi) * Math.sin(theta);
+
+        const mixed = colorA.clone().lerp(Math.random() > 0.78 ? colorC : colorB, Math.random() * 0.7);
+        colors[i * 3] = mixed.r;
+        colors[i * 3 + 1] = mixed.g;
+        colors[i * 3 + 2] = mixed.b;
+      }
+
+      const geo = new THREE.BufferGeometry();
+      geo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+      geo.setAttribute("color", new THREE.BufferAttribute(colors, 3));
+      const mat = new THREE.PointsMaterial({
+        size: 0.062,
+        transparent: true,
+        opacity: 0.86,
+        vertexColors: true,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false
+      });
+      const stars = new THREE.Points(geo, mat);
+      scene.add(stars);
+      return stars;
+    }
+
+    function createNebula() {
+      const group = new THREE.Group();
+      const glowMap = makeGlowTexture();
+      const colors = [0x55ddff, 0xb18cff, 0x5df2bc, 0xffd36b];
+      for (let i = 0; i < 12; i++) {
+        const mat = new THREE.SpriteMaterial({
+          map: glowMap,
+          color: colors[i % colors.length],
+          transparent: true,
+          opacity: 0.08 + Math.random() * 0.07,
+          blending: THREE.AdditiveBlending,
+          depthWrite: false
+        });
+        const sp = new THREE.Sprite(mat);
+        sp.position.set((Math.random() - 0.5) * 18, (Math.random() - 0.5) * 9, -8 - Math.random() * 8);
+        const s = 5 + Math.random() * 7;
+        sp.scale.set(s * 1.5, s, 1);
+        group.add(sp);
+      }
+      scene.add(group);
+      return group;
+    }
+
+    function createPlanet(key, data) {
+      const group = new THREE.Group();
+      group.position.set(...data.position);
+      group.scale.setScalar(0.01);
+      group.userData.key = key;
+
+      const color = new THREE.Color(data.accent);
+      const rings = [];
+      const materialPreset = {
+        automation: { roughness: 0.62, metalness: 0.12, emissiveIntensity: 0.12 },
+        website: { roughness: 0.76, metalness: 0.05, emissiveIntensity: 0.10 },
+        event: { roughness: 0.82, metalness: 0.03, emissiveIntensity: 0.09 }
+      }[key] || { roughness: 0.72, metalness: 0.04, emissiveIntensity: 0.08 };
+      const planet = new THREE.Mesh(
+        new THREE.SphereGeometry(data.radius, 96, 96),
+        new THREE.MeshStandardMaterial({
+          map: makePlanetTexture(data.texture, data.accent),
+          roughness: materialPreset.roughness,
+          metalness: materialPreset.metalness,
+          emissive: color,
+          emissiveIntensity: materialPreset.emissiveIntensity
+        })
+      );
+      planet.userData.key = key;
+      group.add(planet);
+
+      const atmosphere = new THREE.Mesh(
+        new THREE.SphereGeometry(data.radius * 1.08, 96, 96),
+        new THREE.MeshBasicMaterial({
+          color,
+          transparent: true,
+          opacity: 0.16,
+          blending: THREE.AdditiveBlending,
+          side: THREE.BackSide,
+          depthWrite: false
+        })
+      );
+      group.add(atmosphere);
+
+      const halo = new THREE.Sprite(new THREE.SpriteMaterial({
+        map: makeGlowTexture(),
+        color,
+        opacity: 0.28,
+        transparent: true,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false
+      }));
+      halo.scale.set(data.radius * 5.1, data.radius * 5.1, 1);
+      group.add(halo);
+
+      const starlets = new THREE.Group();
+      for (let i = 0; i < 24; i++) {
+        const dotColor = i % 3 === 0 ? 0xffffff : color.getHex();
+        const dot = new THREE.Mesh(
+          new THREE.SphereGeometry(0.015 + Math.random() * 0.026, 12, 12),
+          new THREE.MeshBasicMaterial({ color: dotColor, transparent: true, opacity: 0.76 })
+        );
+        const angle = i / 24 * Math.PI * 2;
+        const tilt = Math.sin(angle * 1.7 + data.radius) * 0.22;
+        dot.position.set(
+          Math.cos(angle) * data.radius * (1.52 + Math.random() * 0.12),
+          tilt,
+          Math.sin(angle) * data.radius * (1.52 + Math.random() * 0.12)
+        );
+        starlets.add(dot);
+      }
+      group.add(starlets);
+
+      if (key === "website") {
+        const ring = new THREE.Mesh(
+          new THREE.TorusGeometry(data.radius * 1.28, 0.018, 16, 160),
+          new THREE.MeshBasicMaterial({ color: 0xffd36b, transparent: true, opacity: 0.54 })
+        );
+        ring.rotation.set(Math.PI * 0.58, 0.2, 0.5);
+        group.add(ring);
+        rings.push(ring);
+        const ring2 = new THREE.Mesh(
+          new THREE.TorusGeometry(data.radius * 1.12, 0.012, 14, 160),
+          new THREE.MeshBasicMaterial({ color: 0xb18cff, transparent: true, opacity: 0.36 })
+        );
+        ring2.rotation.set(Math.PI * 0.62, -0.36, -0.64);
+        group.add(ring2);
+        rings.push(ring2);
+        addOrbitSprite(group, "window", "#c994ff", [-1.55, 0.1, 0.44], [1.08, 0.74], "");
+        addOrbitSprite(group, "code", "#f7a8ff", [1.48, 0.38, 0.12], [0.96, 0.64], "");
+        addOrbitSprite(group, "window", "#ffb36d", [0.58, -1.1, 0.32], [0.90, 0.60], "");
+        addOrbitSprite(group, "code", "#d9a9ff", [-0.35, 1.28, 0.38], [0.84, 0.56], "");
+      }
+
+      if (key === "event") {
+        const eventRing = new THREE.Mesh(
+          new THREE.TorusGeometry(data.radius * 1.38, 0.014, 14, 180),
+          new THREE.MeshBasicMaterial({ color: 0xffd36b, transparent: true, opacity: 0.48 })
+        );
+        eventRing.rotation.set(Math.PI * 0.56, -0.12, -0.42);
+        group.add(eventRing);
+        rings.push(eventRing);
+        const dots = new THREE.Group();
+        for (let i = 0; i < 34; i++) {
+          const dot = new THREE.Mesh(
+            new THREE.SphereGeometry(0.024 + Math.random() * 0.030, 16, 16),
+            new THREE.MeshBasicMaterial({ color: i % 2 ? 0xffd36b : 0xffffff })
+          );
+          const angle = i / 34 * Math.PI * 2;
+          dot.position.set(Math.cos(angle) * data.radius * 1.48, Math.sin(angle * 1.7) * 0.20, Math.sin(angle) * data.radius * 1.48);
+          dots.add(dot);
+        }
+        group.add(dots);
+        rings.push(dots);
+        addOrbitSprite(group, "calendar", "#ffd36b", [-1.5, 0.25, 0.35], [0.92, 0.62], "");
+        addOrbitSprite(group, "mic", "#ffd36b", [-1.0, -1.0, 0.35], [0.84, 0.58], "");
+        addOrbitSprite(group, "text", "#ffd36b", [1.52, 0.62, 0.22], [1.16, 0.78], "SCHEDULE");
+        addOrbitSprite(group, "text", "#ffe08f", [1.02, -0.76, 0.28], [0.86, 0.58], "EVENT");
+      }
+
+      if (key === "automation") {
+        const orbit = new THREE.Mesh(
+          new THREE.TorusGeometry(data.radius * 1.38, 0.014, 12, 180),
+          new THREE.MeshBasicMaterial({ color: 0x55ddff, transparent: true, opacity: 0.58 })
+        );
+        orbit.rotation.set(Math.PI * 0.52, 0.9, 0.2);
+        group.add(orbit);
+        rings.push(orbit);
+        const orbit2 = new THREE.Mesh(
+          new THREE.TorusGeometry(data.radius * 1.18, 0.01, 12, 160),
+          new THREE.MeshBasicMaterial({ color: 0x55ddff, transparent: true, opacity: 0.34 })
+        );
+        orbit2.rotation.set(Math.PI * 0.63, -0.45, -0.72);
+        group.add(orbit2);
+        rings.push(orbit2);
+        const orbit3 = new THREE.Mesh(
+          new THREE.TorusGeometry(data.radius * 1.06, 0.009, 12, 160),
+          new THREE.MeshBasicMaterial({ color: 0xb4f4ff, transparent: true, opacity: 0.30 })
+        );
+        orbit3.rotation.set(Math.PI * 0.70, 0.12, 1.02);
+        group.add(orbit3);
+        rings.push(orbit3);
+        addOrbitSprite(group, "gear", "#55ddff", [-1.38, -1.08, 0.22], [0.82, 0.56], "");
+        addOrbitSprite(group, "robot", "#55ddff", [1.36, 1.16, 0.25], [0.86, 0.58], "");
+      }
+
+      scene.add(group);
+      return { key, data, group, planet, atmosphere, halo, rings, starlets };
+    }
+
+    const stars = createStarField();
+    const nebula = createNebula();
+    const planetEntries = Object.entries(projects).map(([key, data]) => createPlanet(key, data));
+    const clickableMeshes = planetEntries.map(entry => entry.planet);
+
+    const raycaster = new THREE.Raycaster();
+    const pointer = new THREE.Vector2();
+    const mouse = new THREE.Vector2();
+    let selectedKey = null;
+    let hoveredKey = null;
+    let typingTimer = 0;
+
+    function setPointer(event) {
+      const rect = renderer.domElement.getBoundingClientRect();
+      const x = event.clientX ?? event.touches?.[0]?.clientX ?? 0;
+      const y = event.clientY ?? event.touches?.[0]?.clientY ?? 0;
+      pointer.x = ((x - rect.left) / rect.width) * 2 - 1;
+      pointer.y = -((y - rect.top) / rect.height) * 2 + 1;
+    }
+
+    function getProjectFromPointer(event) {
+      setPointer(event);
+      raycaster.setFromCamera(pointer, camera);
+      const hit = raycaster.intersectObjects(clickableMeshes, false)[0];
+      return hit ? hit.object.userData.key : null;
+    }
+
+    function typeText(text) {
+      clearInterval(typingTimer);
+      guideText.textContent = "";
+      let index = 0;
+      typingTimer = setInterval(() => {
+        index += 1;
+        guideText.textContent = text.slice(0, index);
+        if (index >= text.length) clearInterval(typingTimer);
+      }, 24);
+    }
+
+    function openProjectModal(key) {
+      const data = projects[key];
+      if (!data?.modal) return;
+      const detail = data.modal;
+
+      projectModal.style.setProperty("--accent", data.accent);
+      modalKicker.textContent = detail.sectionLabel;
+      modalTitle.textContent = detail.heading;
+      modalIntro.textContent = detail.intro;
+      modalAssistantText.textContent = detail.assistant;
+      modalIndexLink.href = detail.indexHref;
+      modalIndexLink.textContent = "前往 index 對應區段";
+
+      modalStats.replaceChildren();
+      detail.stats.forEach((stat) => {
+        const span = document.createElement("span");
+        span.textContent = stat;
+        modalStats.appendChild(span);
+      });
+
+      modalPreview.replaceChildren();
+      detail.items.forEach((item) => {
+        const article = document.createElement("article");
+        article.className = "preview-item";
+        const title = document.createElement("strong");
+        title.textContent = item.title;
+        const desc = document.createElement("span");
+        desc.textContent = item.desc;
+        article.append(title, desc);
+        modalPreview.appendChild(article);
+      });
+
+      projectModal.classList.add("on");
+      projectModal.setAttribute("aria-hidden", "false");
+    }
+
+    function closeProjectModal() {
+      projectModal.classList.remove("on");
+      projectModal.setAttribute("aria-hidden", "true");
+    }
+
+    function showIntro() {
+      guide.style.setProperty("--accent", "#78c8ff");
+      guide.classList.add("on");
+      guideMeta.textContent = "助手";
+      guideTitle.textContent = "星球導覽開始";
+      wins.innerHTML = "";
+      actions.innerHTML = "";
+      typeText("你好！我是助手，點擊你有興趣的星球，我會用彈跳視窗帶你查看專案特色、成果與對應的作品集區段。");
+    }
+
+    function selectProject(key, openModal = true) {
+      const data = projects[key];
+      selectedKey = key;
+      document.documentElement.style.setProperty("--accent", data.accent);
+      guide.style.setProperty("--accent", data.accent);
+      guide.classList.add("on");
+      hint.classList.add("hide");
+      guideMeta.textContent = "助手";
+      guideTitle.textContent = data.title;
+      signalTitle.textContent = data.name + "星球已選取";
+      signalText.textContent = data.signal;
+      typeText(data.guide);
+
+      wins.innerHTML = "";
+      data.wins.forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = item;
+        wins.appendChild(li);
+      });
+
+      actions.innerHTML = "";
+      data.links.forEach(link => {
+        const a = document.createElement("a");
+        a.href = link.href;
+        a.textContent = link.label;
+        if (link.href.startsWith("http")) {
+          a.target = "_blank";
+          a.rel = "noopener";
+        }
+        actions.appendChild(a);
+      });
+
+      labels.forEach(label => label.classList.toggle("active", label.dataset.project === key));
+      dockButtons.forEach(btn => btn.classList.toggle("active", btn.dataset.project === key));
+
+      if (openModal) openProjectModal(key);
+    }
+
+    labels.forEach(label => {
+      label.addEventListener("click", () => selectProject(label.dataset.project));
+      label.addEventListener("mouseenter", () => { hoveredKey = label.dataset.project; });
+      label.addEventListener("mouseleave", () => { hoveredKey = null; });
+    });
+
+    dockButtons.forEach(btn => {
+      btn.addEventListener("click", () => selectProject(btn.dataset.project));
+      btn.addEventListener("mouseenter", () => { hoveredKey = btn.dataset.project; });
+      btn.addEventListener("mouseleave", () => { hoveredKey = null; });
+    });
+
+    canvas.addEventListener("click", event => {
+      const key = getProjectFromPointer(event);
+      if (key) selectProject(key);
+    });
+
+    canvas.addEventListener("pointermove", event => {
+      mouse.x = (event.clientX / window.innerWidth - 0.5) * 2;
+      mouse.y = (event.clientY / window.innerHeight - 0.5) * 2;
+      const key = getProjectFromPointer(event);
+      hoveredKey = key;
+      canvas.style.cursor = key ? "pointer" : "default";
+    });
+
+    canvas.addEventListener("pointerleave", () => {
+      hoveredKey = null;
+      canvas.style.cursor = "default";
+    });
+
+    modalClose.addEventListener("click", closeProjectModal);
+    projectModal.addEventListener("click", (event) => {
+      if (event.target === projectModal) closeProjectModal();
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") closeProjectModal();
+    });
+
+    function updateLabels() {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      planetEntries.forEach(entry => {
+        const active = entry.key === selectedKey;
+        const hover = entry.key === hoveredKey;
+        const pos = entry.group.position.clone();
+        pos.y += isMobile() ? entry.data.radius * 1.24 : (entry.data.labelOffset ?? entry.data.radius * 1.36);
+        pos.project(camera);
+        const label = document.getElementById("label-" + entry.key);
+        const x = (pos.x * 0.5 + 0.5) * width;
+        const y = (-pos.y * 0.5 + 0.5) * height;
+        label.style.left = `${x}px`;
+        label.style.top = `${y}px`;
+        label.style.opacity = pos.z > 1 || introProgress < 0.46 ? "0" : "1";
+        label.classList.toggle("hover", hover && !active);
+      });
+    }
+
+    const clock = new THREE.Clock();
+    const targetCamera = new THREE.Vector3();
+    let introProgress = 0;
+
+    function easeOutCubic(t) {
+      return 1 - Math.pow(1 - t, 3);
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+      const elapsed = clock.getElapsedTime();
+      const dt = Math.min(clock.getDelta(), 0.04);
+      introProgress = easeOutCubic(Math.min(elapsed / 2.15, 1));
+
+      stars.rotation.y += dt * 0.012;
+      nebula.rotation.z = Math.sin(elapsed * 0.04) * 0.06;
+
+      planetEntries.forEach((entry, index) => {
+        const active = entry.key === selectedKey;
+        const hover = entry.key === hoveredKey;
+        const interactive = active || hover;
+        const layoutScale = isMobile() ? 0.38 : 1;
+        const layoutLift = isMobile() ? -0.18 : 0;
+        const baseX = entry.data.position[0] * layoutScale;
+        const baseZ = entry.data.position[2] * (isMobile() ? 0.72 : 1) + (hover ? 0.46 : active ? 0.18 : 0);
+        const floatY = entry.data.position[1] + layoutLift + Math.sin(elapsed * 0.55 + index * 1.8) * 0.12;
+        const startX = (index - 1) * (isMobile() ? 0.42 : 0.82);
+        const startY = -1.28 + index * 0.68;
+        const targetX = startX * (1 - introProgress) + baseX * introProgress;
+        const targetY = startY * (1 - introProgress) + floatY * introProgress;
+        const targetZ = -6.8 * (1 - introProgress) + baseZ * introProgress;
+        const spinBoost = hover ? 1.35 : active ? 0.42 : 0;
+        entry.planet.rotation.y += dt * (0.13 + index * 0.035 + spinBoost + (1 - introProgress) * 2.2);
+        entry.planet.rotation.x = Math.sin(elapsed * 0.18 + index) * 0.04;
+        entry.group.position.x += (targetX - entry.group.position.x) * 0.09;
+        entry.group.position.z += (targetZ - entry.group.position.z) * 0.09;
+        entry.group.position.y += (targetY - entry.group.position.y) * 0.09;
+        entry.group.rotation.z = (1 - introProgress) * (index - 1) * 1.55;
+        entry.group.rotation.y = (1 - introProgress) * (index + 1) * 2.35;
+        const baseGoal = isMobile() ? (hover ? 0.84 : active ? 0.82 : 0.68) : (hover ? 1.20 : active ? 1.12 : 1);
+        const goal = baseGoal * (0.14 + introProgress * 0.86);
+        entry.group.scale.lerp(new THREE.Vector3(goal, goal, goal), 0.08);
+        entry.rings.forEach((ring, ringIndex) => {
+          const direction = ringIndex % 2 ? -1 : 1;
+          ring.rotation.z += dt * direction * (interactive ? 0.92 + ringIndex * 0.18 : 0.24 + ringIndex * 0.06);
+          if (ring.material) {
+            const targetOpacity = interactive ? 0.72 : ring.material.opacity < 0.36 ? 0.34 : 0.48;
+            ring.material.opacity += (targetOpacity - ring.material.opacity) * 0.06;
+          }
+        });
+        entry.starlets.rotation.y += dt * (interactive ? 1.05 : 0.32);
+        entry.starlets.rotation.z += dt * (interactive ? 0.42 : 0.10);
+        entry.halo.material.opacity += ((hover ? 0.42 : active ? 0.34 : 0.25) - entry.halo.material.opacity) * 0.07;
+        entry.atmosphere.material.opacity += ((hover ? 0.34 : active ? 0.28 : 0.15) - entry.atmosphere.material.opacity) * 0.08;
+      });
+
+      const baseZ = isMobile() ? 10.8 : 9.35;
+      targetCamera.set(mouse.x * 0.28, 1.15 - mouse.y * 0.16, baseZ);
+      if (selectedKey) {
+        const entry = planetEntries.find(item => item.key === selectedKey);
+        targetCamera.x += entry.group.position.x * (isMobile() ? 0.06 : 0.10);
+        targetCamera.y += entry.group.position.y * 0.03;
+      }
+      camera.position.lerp(targetCamera, 0.045);
+      camera.lookAt(0, 0.35, -1.0);
+      updateLabels();
+      renderer.render(scene, camera);
+    }
+
+    function resize() {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      renderer.setSize(width, height);
+      camera.aspect = width / height;
+      camera.fov = isMobile() ? 56 : 48;
+      camera.updateProjectionMatrix();
+      updateLabels();
+    }
+
+    window.addEventListener("resize", resize);
+    resize();
+    showIntro();
+    animate();
+  </script>
+</body>
+</html>

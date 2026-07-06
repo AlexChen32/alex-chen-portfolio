@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>陳勇學｜知識星球作品集概念</title>
+  <style>
+    :root {
+      --bg: #fbf8f1;
+      --paper: rgba(255, 255, 255, 0.86);
+      --ink: #172026;
+      --muted: #657078;
+      --line: rgba(23, 32, 38, 0.16);
+      --line-strong: rgba(23, 32, 38, 0.26);
+      --teal: #0f9f91;
+      --blue: #3975ff;
+      --orange: #f07f38;
+      --gold: #dba331;
+      --rose: #e65a5a;
+      --violet: #7e63db;
+      --shadow: 0 22px 70px rgba(23, 32, 38, 0.16);
+      --soft-shadow: 0 12px 36px rgba(23, 32, 38, 0.1);
+      --radius: 8px;
+      --font: "Noto Sans TC", "Microsoft JhengHei", system-ui, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      font-family: var(--font);
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 12%, rgba(240, 127, 56, 0.14), transparent 27%),
+        radial-gradient(circle at 84% 8%, rgba(15, 159, 145, 0.16), transparent 28%),
+        linear-gradient(180deg, #fffdf8, var(--bg));
+      overflow-x: hidden;
+    }
+
+    button,
+    a {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .page {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: minmax(360px, 0.78fr) minmax(640px, 1.22fr);
+      gap: clamp(22px, 3vw, 54px);
+      padding: 28px;
+    }
+
+    .left {
+      position: sticky;
+      top: 24px;
+      align-self: start;
+      min-height: calc(100vh - 56px);
+      display: grid;
+      align-content: center;
+      gap: 18px;
+      z-index: 5;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      width: fit-content;
+      padding: 9px 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: var(--soft-shadow);
+      backdrop-filter: blur(16px);
+    }
+
+    .brand-dot {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 32% 28%, #fff 0 11%, transparent 12%),
+        radial-gradient(circle at 70% 70%, var(--blue), transparent 33%),
+        conic-gradient(from 120deg, var(--teal), var(--orange), var(--violet), var(--teal));
+      box-shadow: 0 0 22px rgba(15, 159, 145, 0.28);
+    }
+
+    .brand strong {
+      display: block;
+      font-size: 15px;
+      line-height: 1.1;
+    }
+
+    .brand span {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .kicker {
+      display: inline-flex;
+      width: fit-content;
+      padding: 5px 9px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.72);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(38px, 5vw, 68px);
+      line-height: 1.03;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      margin: 0;
+      max-width: 560px;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.85;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .metric {
+      min-height: 84px;
+      padding: 13px 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: var(--soft-shadow);
+      backdrop-filter: blur(12px);
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 25px;
+      line-height: 1.1;
+    }
+
+    .metric span {
+      display: block;
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      line-height: 1.4;
+    }
+
+    .detail {
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px);
+    }
+
+    .eyebrow {
+      margin: 0 0 6px;
+      color: var(--teal);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .detail h2 {
+      margin: 0 0 10px;
+      font-size: 25px;
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+
+    .detail p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.75;
+    }
+
+    .achievement-list {
+      display: grid;
+      gap: 7px;
+      margin: 14px 0 14px;
+    }
+
+    .achievement {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+      padding: 8px 10px;
+      border: 1px solid color-mix(in srgb, var(--active, var(--teal)) 24%, var(--line));
+      border-radius: var(--radius);
+      background: color-mix(in srgb, var(--active, var(--teal)) 8%, white);
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 1.45;
+    }
+
+    .achievement::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      margin-top: 6px;
+      border-radius: 50%;
+      background: var(--active, var(--teal));
+      box-shadow: 0 0 0 4px color-mix(in srgb, var(--active, var(--teal)) 17%, transparent);
+      flex: 0 0 auto;
+    }
+
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .link-btn {
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      padding: 7px 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      color: var(--ink);
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .guide {
+      display: grid;
+      grid-template-columns: 132px minmax(0, 1fr);
+      align-items: end;
+      gap: 10px;
+      margin-top: 2px;
+    }
+
+    .mascot-frame {
+      position: relative;
+      min-height: 174px;
+      overflow: hidden;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background:
+        radial-gradient(circle at 50% 18%, rgba(15, 159, 145, 0.22), transparent 36%),
+        rgba(255, 255, 255, 0.64);
+      box-shadow: var(--soft-shadow);
+    }
+
+    .mascot-frame img {
+      position: absolute;
+      left: 50%;
+      bottom: -36px;
+      width: 178px;
+      max-width: none;
+      transform: translateX(-50%);
+      filter: drop-shadow(0 18px 22px rgba(23, 32, 38, 0.2));
+    }
+
+    .speech {
+      min-height: 156px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.92);
+      box-shadow: var(--soft-shadow);
+      backdrop-filter: blur(12px);
+    }
+
+    .speech strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 13px;
+    }
+
+    .speech p {
+      min-height: 96px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .speech p::after {
+      content: "";
+      display: inline-block;
+      width: 7px;
+      height: 1em;
+      margin-left: 2px;
+      vertical-align: -2px;
+      background: var(--active, var(--teal));
+      animation: caret 820ms steps(1) infinite;
+    }
+
+    .map-wrap {
+      position: relative;
+      min-height: calc(100vh - 56px);
+      border-radius: 18px;
+      overflow: hidden;
+      background:
+        linear-gradient(110deg, rgba(255,255,255,0.46), transparent 44%),
+        radial-gradient(circle at 55% 50%, rgba(255,255,255,0.66), transparent 37%);
+    }
+
+    .graph {
+      position: absolute;
+      inset: 0;
+      min-height: 720px;
+    }
+
+    .link-layer {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .link-layer line,
+    .link-layer path {
+      stroke: rgba(23, 32, 38, 0.18);
+      stroke-width: 1;
+      vector-effect: non-scaling-stroke;
+    }
+
+    .link-layer .primary-link {
+      stroke: color-mix(in srgb, var(--active, var(--teal)) 48%, rgba(23,32,38,.12));
+      stroke-width: 1.5;
+    }
+
+    .project-node,
+    .achievement-node,
+    .center-node {
+      position: absolute;
+      z-index: 3;
+      border: 0;
+      border-radius: 50%;
+      color: #fff;
+      text-align: center;
+      transition: transform 180ms ease, filter 180ms ease, box-shadow 180ms ease, opacity 180ms ease;
+    }
+
+    .project-node {
+      width: 134px;
+      height: 134px;
+      padding: 0 14px;
+      display: grid;
+      place-items: center;
+      font-size: 14px;
+      font-weight: 950;
+      line-height: 1.24;
+      box-shadow:
+        inset -18px -22px 34px rgba(0, 0, 0, 0.25),
+        inset 14px 14px 24px rgba(255, 255, 255, 0.25),
+        0 18px 42px rgba(23, 32, 38, 0.18);
+    }
+
+    .project-node::before,
+    .project-node::after {
+      content: "";
+      position: absolute;
+      pointer-events: none;
+      border-radius: 50%;
+    }
+
+    .project-node::before {
+      inset: -9px;
+      background:
+        radial-gradient(circle at 42% 34%, rgba(255, 255, 255, 0.28), transparent 0 38%, transparent 39%),
+        color-mix(in srgb, var(--active, var(--teal)) 20%, transparent);
+      filter: blur(12px);
+      opacity: 0.38;
+    }
+
+    .project-node::after {
+      left: 24%;
+      top: 18%;
+      width: 22%;
+      height: 18%;
+      background: rgba(255, 255, 255, 0.42);
+      filter: blur(3px);
+    }
+
+    .project-node.active {
+      transform: scale(1.12);
+      filter: saturate(1.12);
+      box-shadow:
+        inset -18px -22px 34px rgba(0, 0, 0, 0.25),
+        inset 14px 14px 24px rgba(255, 255, 255, 0.28),
+        0 0 0 8px color-mix(in srgb, var(--active, var(--teal)) 18%, transparent),
+        0 22px 56px color-mix(in srgb, var(--active, var(--teal)) 28%, rgba(23,32,38,.16));
+    }
+
+    .achievement-node {
+      z-index: 2;
+      width: 74px;
+      height: 74px;
+      display: grid;
+      place-items: center;
+      padding: 0 8px;
+      background:
+        radial-gradient(circle at 34% 26%, rgba(255,255,255,.62), transparent 0 13%, transparent 14%),
+        radial-gradient(circle at 60% 70%, color-mix(in srgb, var(--node-color, var(--teal)) 72%, black), var(--node-color, var(--teal)));
+      color: #fff;
+      font-size: 10px;
+      line-height: 1.28;
+      font-weight: 900;
+      box-shadow:
+        inset -9px -13px 20px rgba(0, 0, 0, 0.24),
+        0 12px 28px rgba(23, 32, 38, 0.13);
+      opacity: .72;
+    }
+
+    .achievement-node.active {
+      opacity: 1;
+      transform: scale(1.08);
+    }
+
+    .center-node {
+      z-index: 2;
+      width: 252px;
+      height: 252px;
+      left: 47%;
+      top: 48%;
+      transform: translate(-50%, -50%);
+      display: grid;
+      place-items: end center;
+      padding: 22px 18px 28px;
+      overflow: visible;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 34% 28%, rgba(255, 255, 255, .72), transparent 0 15%, transparent 16%),
+        radial-gradient(circle at 50% 58%, rgba(255,255,255,.58), rgba(15,159,145,.26) 48%, rgba(15,159,145,.48));
+      box-shadow:
+        inset -22px -28px 54px rgba(0, 0, 0, 0.09),
+        0 26px 70px rgba(15, 159, 145, 0.18);
+    }
+
+    .center-node strong {
+      display: block;
+      max-width: 180px;
+      font-size: 18px;
+      line-height: 1.35;
+    }
+
+    .center-node span {
+      display: block;
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.4;
+      font-weight: 800;
+      max-width: 180px;
+    }
+
+    .center-label {
+      position: relative;
+      z-index: 4;
+      transform: translateY(8px);
+      padding: 8px 10px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.72);
+      box-shadow: 0 12px 26px rgba(23, 32, 38, 0.10);
+      backdrop-filter: blur(8px);
+    }
+
+    .center-mascot {
+      position: absolute;
+      z-index: 3;
+      left: 50%;
+      top: 15px;
+      transform: translateX(-50%);
+      width: 104px;
+      height: auto;
+      filter: drop-shadow(0 18px 18px rgba(23, 32, 38, 0.20));
+      pointer-events: none;
+    }
+
+    .p-wecosplay {
+      left: 52%;
+      top: 8%;
+      background:
+        radial-gradient(circle at 30% 24%, rgba(255,255,255,.52), transparent 0 12%, transparent 13%),
+        radial-gradient(circle at 68% 68%, #e86f2d, #ff9b48 62%, #cc5d23);
+    }
+
+    .p-automation {
+      right: 5%;
+      top: 34%;
+      background:
+        radial-gradient(circle at 30% 24%, rgba(255,255,255,.52), transparent 0 12%, transparent 13%),
+        radial-gradient(circle at 70% 72%, #194bd1, #4b83ff 64%, #163aa4);
+    }
+
+    .p-accupass {
+      left: 28%;
+      top: 27%;
+      background:
+        radial-gradient(circle at 30% 24%, rgba(255,255,255,.56), transparent 0 12%, transparent 13%),
+        radial-gradient(circle at 68% 70%, #b9780c, #e4b238 62%, #96610a);
+      color: #2e2515;
+    }
+
+    .p-andong {
+      left: 14%;
+      top: 58%;
+      background:
+        radial-gradient(circle at 30% 24%, rgba(255,255,255,.55), transparent 0 12%, transparent 13%),
+        radial-gradient(circle at 68% 70%, #09786f, #18b7a7 63%, #06635b);
+    }
+
+    .p-prd {
+      right: 18%;
+      top: 68%;
+      background:
+        radial-gradient(circle at 30% 24%, rgba(255,255,255,.52), transparent 0 12%, transparent 13%),
+        radial-gradient(circle at 72% 72%, #c33949, #f06a6f 64%, #a52d3a);
+    }
+
+    .p-review {
+      left: 50%;
+      bottom: 4%;
+      background:
+        radial-gradient(circle at 30% 24%, rgba(255,255,255,.52), transparent 0 12%, transparent 13%),
+        radial-gradient(circle at 68% 70%, #593ab7, #9277ff 62%, #49319b);
+    }
+
+    .a1 { left: 45%; top: 2%; --node-color: var(--orange); }
+    .a2 { left: 67%; top: 7%; --node-color: var(--orange); }
+    .a3 { left: 42%; top: 20%; --node-color: var(--orange); }
+    .a4 { right: 1%; top: 25%; --node-color: var(--blue); }
+    .a5 { right: 10%; top: 48%; --node-color: var(--blue); }
+    .a6 { right: 0%; top: 60%; --node-color: var(--blue); }
+    .a7 { left: 20%; top: 18%; --node-color: var(--gold); color: #2e2515; }
+    .a8 { left: 22%; top: 42%; --node-color: var(--gold); color: #2e2515; }
+    .a9 { left: 24%; top: 51%; --node-color: var(--gold); color: #2e2515; }
+    .a10 { left: 3%; top: 51%; --node-color: var(--teal); }
+    .a11 { left: 8%; top: 75%; --node-color: var(--teal); }
+    .a12 { left: 27%; top: 72%; --node-color: var(--teal); }
+    .a13 { right: 10%; top: 82%; --node-color: var(--rose); }
+    .a14 { right: 28%; top: 84%; --node-color: var(--rose); }
+    .a15 { right: 2%; top: 78%; --node-color: var(--rose); }
+    .a16 { left: 43%; bottom: 0%; --node-color: var(--violet); }
+    .a17 { left: 60%; bottom: 14%; --node-color: var(--violet); }
+    .a18 { left: 36%; bottom: 16%; --node-color: var(--violet); }
+
+    .map-hint {
+      position: absolute;
+      left: 20px;
+      bottom: 20px;
+      z-index: 5;
+      width: min(360px, calc(100% - 40px));
+      padding: 13px 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.82);
+      box-shadow: var(--soft-shadow);
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+      backdrop-filter: blur(12px);
+    }
+
+    .map-hint strong {
+      display: block;
+      margin-bottom: 3px;
+      color: var(--ink);
+      font-size: 13px;
+    }
+
+    @keyframes caret {
+      0%, 46% { opacity: 1; }
+      47%, 100% { opacity: 0; }
+    }
+
+    @media (max-width: 1100px) {
+      .page {
+        grid-template-columns: 1fr;
+      }
+
+      .left {
+        position: static;
+        min-height: auto;
+      }
+
+      .map-wrap {
+        min-height: 780px;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .page {
+        padding: 14px;
+        gap: 18px;
+      }
+
+      h1 {
+        font-size: 38px;
+      }
+
+      .metrics,
+      .guide {
+        grid-template-columns: 1fr;
+      }
+
+      .mascot-frame {
+        min-height: 230px;
+      }
+
+      .mascot-frame img {
+        width: 220px;
+      }
+
+      .map-wrap {
+        min-height: 940px;
+        overflow: visible;
+      }
+
+      .graph {
+        position: relative;
+        min-height: 940px;
+      }
+
+      .project-node {
+        width: 112px;
+        height: 112px;
+        font-size: 12px;
+      }
+
+      .achievement-node {
+        width: 62px;
+        height: 62px;
+        font-size: 9px;
+      }
+
+      .center-node {
+        width: 198px;
+        height: 198px;
+        left: 50%;
+        top: 48%;
+        padding: 18px 12px 22px;
+      }
+
+      .center-label {
+        transform: translateY(8px);
+        padding: 7px 8px;
+        border-radius: 12px;
+      }
+
+      .center-node strong {
+        font-size: 15px;
+        max-width: 150px;
+      }
+
+      .center-node span {
+        font-size: 10px;
+        max-width: 150px;
+      }
+
+      .center-mascot {
+        width: 78px;
+        left: 50%;
+        top: 13px;
+        transform: translateX(-50%);
+      }
+
+      .p-wecosplay { left: 47%; top: 4%; }
+      .p-accupass { left: 6%; top: 18%; }
+      .p-automation { right: 4%; top: 28%; }
+      .p-andong { left: 6%; top: 57%; }
+      .p-prd { right: 8%; top: 66%; }
+      .p-review { left: 36%; bottom: 2%; }
+
+      .a1 { left: 36%; top: 0%; }
+      .a2 { left: 76%; top: 5%; }
+      .a3 { left: 55%; top: 18%; }
+      .a4 { right: 0%; top: 18%; }
+      .a5 { right: 28%; top: 40%; }
+      .a6 { right: 1%; top: 46%; }
+      .a7 { left: 0%; top: 10%; }
+      .a8 { left: 24%; top: 34%; }
+      .a9 { left: 2%; top: 35%; }
+      .a10 { left: 0%; top: 49%; }
+      .a11 { left: 3%; top: 75%; }
+      .a12 { left: 28%; top: 70%; }
+      .a13 { right: 0%; top: 80%; }
+      .a14 { right: 35%; top: 78%; }
+      .a15 { right: 1%; top: 60%; }
+      .a16 { left: 28%; bottom: 0%; }
+      .a17 { left: 66%; bottom: 13%; }
+      .a18 { left: 6%; bottom: 13%; }
+
+      .map-hint {
+        position: static;
+        margin-top: 14px;
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page" style="--active: var(--orange)">
+    <section class="left" aria-label="作品集導覽">
+      <div class="brand">
+        <span class="brand-dot" aria-hidden="true"></span>
+        <strong>Project Knowledge Planet<span>大型專案 × 成就節點</span></strong>
+      </div>
+
+      <span class="kicker">Knowledge Graph Portfolio · HR 點擊專案星球</span>
+      <h1>用知識連結圖呈現大型專案成果</h1>
+      <p class="lead">這版不再把每個素材都做成節點，只保留大型專案星球；每顆星球周圍放該專案的成就衛星，讓 HR 先理解專案主軸，再看具體成果。</p>
+
+      <div class="metrics" aria-label="核心數據">
+        <div class="metric"><strong>1,690%</strong><span>Accupass 追蹤成長</span></div>
+        <div class="metric"><strong>10,000+</strong><span>基地與活動服務人次</span></div>
+        <div class="metric"><strong>30%+</strong><span>AI / SOP 節省作業時間</span></div>
+      </div>
+
+      <article class="detail" aria-live="polite">
+        <p class="eyebrow" id="detailCategory">代表作品 · 產品管理</p>
+        <h2 id="detailTitle">WeCosplay｜AI 協作全端電商平台</h2>
+        <p id="detailSummary">把模糊的電商平台想法拆成可執行功能，透過 AI 協作完成網站、會員 / 商品 / 訂單流程與上線部署，適合作為產品 / 軟體專案管理能力展示。</p>
+        <div class="achievement-list" id="achievementList"></div>
+        <div class="links">
+          <a class="link-btn" href="https://we-cosplay.com/" target="_blank" rel="noopener">查看 WeCosplay</a>
+          <a class="link-btn" href="https://alex-chen-portfolio-nine.vercel.app/" target="_blank" rel="noopener">查看現有作品集</a>
+        </div>
+      </article>
+
+      <aside class="guide" aria-label="看板娘導覽">
+        <div class="mascot-frame">
+          <img src="../images_web/看板娘_cutout.png" alt="黑短髮 Q 版看板娘導覽員">
+        </div>
+        <div class="speech">
+          <strong id="guideTitle">成就解說｜WeCosplay</strong>
+          <p id="guideText"></p>
+        </div>
+      </aside>
+    </section>
+
+    <section class="map-wrap" aria-label="大型專案知識連結圖">
+      <div class="graph" id="graph">
+        <svg class="link-layer" viewBox="0 0 1000 760" preserveAspectRatio="none" aria-hidden="true">
+          <line class="primary-link" x1="520" y1="365" x2="610" y2="95"/>
+          <line class="primary-link" x1="520" y1="365" x2="860" y2="315"/>
+          <line class="primary-link" x1="520" y1="365" x2="365" y2="250"/>
+          <line class="primary-link" x1="520" y1="365" x2="235" y2="560"/>
+          <line class="primary-link" x1="520" y1="365" x2="760" y2="610"/>
+          <line class="primary-link" x1="520" y1="365" x2="560" y2="700"/>
+          <path d="M610 95 C560 50, 500 36, 470 35"/>
+          <path d="M610 95 C720 50, 745 64, 770 62"/>
+          <path d="M610 95 C540 150, 510 150, 480 158"/>
+          <path d="M860 315 C945 260, 960 245, 970 230"/>
+          <path d="M860 315 C800 385, 790 392, 775 390"/>
+          <path d="M860 315 C950 405, 955 430, 970 455"/>
+          <path d="M365 250 C280 188, 230 150, 215 135"/>
+          <path d="M365 250 C330 325, 325 335, 314 326"/>
+          <path d="M365 250 C340 325, 305 378, 285 412"/>
+          <path d="M235 560 C120 500, 90 480, 70 472"/>
+          <path d="M235 560 C150 650, 115 670, 120 678"/>
+          <path d="M235 560 C330 665, 335 670, 325 674"/>
+          <path d="M760 610 C850 705, 870 700, 890 690"/>
+          <path d="M760 610 C675 705, 660 707, 650 694"/>
+          <path d="M760 610 C910 585, 930 548, 950 535"/>
+          <path d="M560 700 C510 740, 500 748, 490 742"/>
+          <path d="M560 700 C660 660, 662 655, 672 640"/>
+          <path d="M560 700 C420 650, 405 640, 380 640"/>
+        </svg>
+
+        <button class="project-node p-wecosplay active" type="button" data-project="wecosplay">WeCosplay<br>全端平台</button>
+        <button class="project-node p-automation" type="button" data-project="automation">AI 流程<br>優化</button>
+        <button class="project-node p-accupass" type="button" data-project="accupass">Accupass<br>品牌行銷</button>
+        <button class="project-node p-andong" type="button" data-project="andong">安東青創<br>基地</button>
+        <button class="project-node p-prd" type="button" data-project="prd">AI 企劃<br>PRD</button>
+        <button class="project-node p-review" type="button" data-project="review">AI 多模型<br>互審</button>
+
+        <div class="center-node">
+          <img class="center-mascot" src="../images_web/看板娘_cutout.png" alt="" aria-hidden="true">
+          <div class="center-label"><strong>陳勇學作品集</strong><span>專案管理 · AI 自動化 · 產品落地</span></div>
+        </div>
+
+        <button class="achievement-node a1 active" type="button" data-project="wecosplay">需求拆解</button>
+        <button class="achievement-node a2 active" type="button" data-project="wecosplay">測試驗收</button>
+        <button class="achievement-node a3 active" type="button" data-project="wecosplay">上線部署</button>
+        <button class="achievement-node a4" type="button" data-project="automation">SOP</button>
+        <button class="achievement-node a5" type="button" data-project="automation">AI 摘要</button>
+        <button class="achievement-node a6" type="button" data-project="automation">省時 30%</button>
+        <button class="achievement-node a7" type="button" data-project="accupass">1,690%</button>
+        <button class="achievement-node a8" type="button" data-project="accupass">前十大</button>
+        <button class="achievement-node a9" type="button" data-project="accupass">活動數據</button>
+        <button class="achievement-node a10" type="button" data-project="andong">政府計畫</button>
+        <button class="achievement-node a11" type="button" data-project="andong">10,000+</button>
+        <button class="achievement-node a12" type="button" data-project="andong">KPI 追蹤</button>
+        <button class="achievement-node a13" type="button" data-project="prd">User Story</button>
+        <button class="achievement-node a14" type="button" data-project="prd">Roadmap</button>
+        <button class="achievement-node a15" type="button" data-project="prd">驗收條件</button>
+        <button class="achievement-node a16" type="button" data-project="review">交叉審查</button>
+        <button class="achievement-node a17" type="button" data-project="review">品質控管</button>
+        <button class="achievement-node a18" type="button" data-project="review">風險意識</button>
+      </div>
+      <p class="map-hint"><strong>操作方式</strong>點擊任一大型專案星球，左側會顯示該專案的目標、成就與看板娘逐字解說。小衛星代表該專案底下的成果節點。</p>
+    </section>
+  </main>
+
+  <script>
+    const root = document.querySelector(".page");
+    const projects = {
+      wecosplay: {
+        color: "var(--orange)",
+        category: "代表作品 · 產品管理",
+        title: "WeCosplay｜AI 協作全端電商平台",
+        summary: "把模糊的電商平台想法拆成可執行功能，透過 AI 協作完成網站、會員 / 商品 / 訂單流程與上線部署，適合作為產品 / 軟體專案管理能力展示。",
+        achievements: ["AI 協作完成從需求拆解到上線部署", "展示產品功能規劃、測試驗收與維運追蹤", "可作為產品 / 軟體 PM 的實作案例"],
+        guide: "這顆星球代表產品落地能力。HR 點進來會看到：你不是只會使用 AI，而是能把需求拆成規格、驗收產出，並把產品推到線上。"
+      },
+      automation: {
+        color: "var(--blue)",
+        category: "流程優化 · AI 自動化",
+        title: "AI 行政流程優化",
+        summary: "將報表、核銷、會議紀錄、活動成果與資料摘要整理成 SOP，並透過 ChatGPT、Gemini、NotebookLM、n8n 輔助產出，降低重複作業。",
+        achievements: ["將報表、核銷、會議紀錄整理成 SOP", "以 AI 工具輔助文件初稿與資料摘要", "節省 30%+ 重複行政作業時間"],
+        guide: "這顆星球代表流程優化能力。重點是 Before / After：原本繁瑣的行政流程，被你整理成 SOP 與 AI 輔助流程，讓作業時間下降。"
+      },
+      accupass: {
+        color: "var(--gold)",
+        category: "品牌行銷 · 數據成長",
+        title: "Accupass 平台品牌經營",
+        summary: "負責活動平台內容、報名頁、活動成效追蹤與品牌曝光，讓追蹤人數由 60+ 成長到 1,100+，成長率達 1,690%。",
+        achievements: ["平台追蹤人數由 60+ 成長至 1,100+", "成長率達 1,690%", "獲選 Accupass 前十大主辦單位"],
+        guide: "這顆星球是最直接的成果數據。HR 可以快速理解：你不只會辦活動，也能用數據追蹤品牌經營與平台成長。"
+      },
+      andong: {
+        color: "var(--teal)",
+        category: "政府專案 · 執行管理",
+        title: "桃園安東青創基地 113 / 114 年計畫",
+        summary: "參與政府計畫執行、活動企劃、KPI 追蹤、外賓接待、成果報告與核銷資料整理，累計服務 10,000+ 人次。",
+        achievements: ["執行 113 / 114 年桃園安東青創基地計畫", "累計服務 10,000+ 人次", "整合活動企劃、外賓接待、KPI 與成果報告"],
+        guide: "這顆星球代表專案執行穩定度。它能說明你處理過政府計畫、跨單位協調、KPI 追蹤與成果彙整，不只是單一活動支援。"
+      },
+      prd: {
+        color: "var(--rose)",
+        category: "補強作品 · 軟體 PM",
+        title: "AI 活動企劃助理 PRD",
+        summary: "規劃一套協助企劃產出活動提案、流程表、講師名單、KPI 表與結案報告的 AI 工具，用來補強產品需求文件能力。",
+        achievements: ["補強軟體 PM 的 PRD 文件能力", "包含 User Story、Roadmap、驗收條件", "把 AI 活動企劃助理整理成可開發規格"],
+        guide: "這顆星球是轉職產品 / 軟體 PM 的補強作品。它可以讓 HR 知道你能把 AI 工具想法轉成 PRD、功能規格與驗收條件。"
+      },
+      review: {
+        color: "var(--violet)",
+        category: "品質控管 · AI 協作",
+        title: "AI 多模型互審協作流程",
+        summary: "設計 Claude、Codex、Cowork 等多 AI 交叉審查流程，讓不同模型互相檢查文件、程式與方案盲點，降低單一模型誤判。",
+        achievements: ["設計多 AI 交叉審查流程", "降低單一模型盲點與文件錯誤", "展示 AI 專案品質控管與風險意識"],
+        guide: "這顆星球代表 AI 專案的品質控管。它說明你知道 AI 產出不能直接相信，需要透過審查節點與人工判斷降低風險。"
+      }
+    };
+
+    const els = {
+      category: document.getElementById("detailCategory"),
+      title: document.getElementById("detailTitle"),
+      summary: document.getElementById("detailSummary"),
+      achievements: document.getElementById("achievementList"),
+      guideTitle: document.getElementById("guideTitle"),
+      guideText: document.getElementById("guideText")
+    };
+
+    let timer = 0;
+
+    function typeGuide(title, text) {
+      clearInterval(timer);
+      els.guideTitle.textContent = title;
+      els.guideText.textContent = "";
+      let i = 0;
+      timer = setInterval(() => {
+        i += 1;
+        els.guideText.textContent = text.slice(0, i);
+        if (i >= text.length) clearInterval(timer);
+      }, 22);
+    }
+
+    function selectProject(key) {
+      const data = projects[key];
+      root.style.setProperty("--active", data.color);
+      els.category.textContent = data.category;
+      els.title.textContent = data.title;
+      els.summary.textContent = data.summary;
+      els.achievements.innerHTML = "";
+      data.achievements.forEach(item => {
+        const row = document.createElement("div");
+        row.className = "achievement";
+        row.textContent = item;
+        els.achievements.appendChild(row);
+      });
+      document.querySelectorAll("[data-project]").forEach(node => node.classList.toggle("active", node.dataset.project === key));
+      typeGuide("成就解說｜" + data.title.split("｜")[0], data.guide);
+    }
+
+    document.querySelectorAll("[data-project]").forEach(node => {
+      node.addEventListener("click", () => selectProject(node.dataset.project));
+    });
+
+    selectProject("wecosplay");
+  </script>
+</body>
+</html>

@@ -1558,7 +1558,7 @@
         <p class="hero-subtitle"><span id="typed">AI 製作內容 | Workflow 自動化 | 全端開發 | 政府標案執行</span><span class="type-caret" aria-hidden="true"></span></p>
         <p class="hero-summary">以「軟體工程・AI 協作」與「活動企劃・政府標案」兩大主軸，呈現網站開發、Workflow 自動化與專案執行的實作經驗。</p>
         <div class="hero-actions">
-          <a class="btn orange" href="#software">瀏覽軟體作品</a>
+          <a class="btn secondary" href="#software">瀏覽軟體作品</a>
           <a class="btn secondary" href="#events">瀏覽活動經驗</a>
           <a class="btn game" href="resume3d.html">🌌 進入星空互動履歷</a>
         </div>
@@ -2088,21 +2088,7 @@
         });
       }
 
-      /* ---- 卡片 3D 傾斜（桌機） ---- */
-      if (!reduced && window.matchMedia("(pointer: fine)").matches) {
-        document.querySelectorAll(".project-card, .skill-card, .stat").forEach((card) => {
-          card.classList.add("tilt");
-          card.addEventListener("mousemove", (e) => {
-            const r = card.getBoundingClientRect();
-            const x = (e.clientX - r.left) / r.width - 0.5;
-            const y = (e.clientY - r.top) / r.height - 0.5;
-            card.style.transform = `perspective(900px) rotateX(${(-y * 5).toFixed(2)}deg) rotateY(${(x * 6).toFixed(2)}deg) translateY(-4px)`;
-          });
-          card.addEventListener("mouseleave", () => {
-            card.style.transform = "";
-          });
-        });
-      }
+      /* 卡片 3D 傾斜已移除（依需求：專案卡不做滑鼠晃動效果） */
 
       /* ---- Hero 粒子網絡 ---- */
       const canvas = document.getElementById("hero-canvas");
