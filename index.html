@@ -1063,9 +1063,10 @@
 
     .assistant-panel {
       width: min(390px, calc(100vw - 32px));
+      height: min(560px, calc(100vh - 112px));
       max-height: min(560px, calc(100vh - 112px));
       display: none;
-      grid-template-rows: auto 1fr auto;
+      grid-template-rows: auto minmax(0, 1fr) auto auto;
       overflow: hidden;
       border: 1px solid rgba(17, 24, 39, 0.12);
       border-radius: 18px;
@@ -1128,9 +1129,11 @@
       display: grid;
       align-content: start;
       gap: 10px;
-      min-height: 260px;
+      min-height: 0;
       padding: 14px;
       overflow: auto;
+      overscroll-behavior: contain;
+      scrollbar-gutter: stable;
       background: linear-gradient(180deg, rgba(248,245,239,.78), rgba(255,253,249,.98));
     }
 
@@ -1145,6 +1148,8 @@
       line-height: 1.65;
       font-weight: 700;
       white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      word-break: break-word;
     }
 
     .chat-msg.user {
@@ -1415,6 +1420,7 @@
 
       .assistant-panel {
         width: calc(100vw - 24px);
+        height: calc(100vh - 92px);
         max-height: calc(100vh - 92px);
       }
 

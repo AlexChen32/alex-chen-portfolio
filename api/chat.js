@@ -121,9 +121,10 @@ function extractGeminiResult(data) {
 function looksIncompleteAnswer(answer, finishReason) {
   const text = String(answer || "").trim();
   if (!text) return true;
-  if (finishReason === "MAX_TOKENS") return true;
+  if (finishReason && finishReason !== "STOP") return true;
   if ((text.match(/\*\*/g) || []).length % 2 === 1) return true;
   if (/[：:，,、；;]$/.test(text)) return true;
+  if (!/[。！？!?…」』）)\].]$/.test(text)) return true;
   if (/(^|\n)\s*[-*]\s*(\*\*)?[^。！？!?]*$/.test(text) && !/[。！？!?]$/.test(text)) return true;
   if (/(包含|例如|如下|分別是|重點有)$/.test(text)) return true;
   if (/\*\*$/.test(text) && !/[。！？!?]$/.test(text)) return true;
