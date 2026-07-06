@@ -3,7 +3,7 @@ const knowledge = require("../data/portfolio_knowledge.json");
 const OUT_OF_SCOPE =
   knowledge.profile?.outOfScopeAnswer ||
   "這不在我能回答的範圍內。請問還有什麼想要諮詢的嗎？";
-const MODEL = process.env.GEMINI_MODEL || "gemini-3.5-flash";
+const MODEL = process.env.GEMINI_MODEL || process.env.gemini_model || "gemini-3.5-flash";
 const MAX_MESSAGE_LENGTH = 500;
 
 function normalize(value) {
@@ -76,7 +76,7 @@ function buildUserPrompt(message, chunks) {
 }
 
 async function callGemini(message, chunks) {
-  const apiKey = process.env.GEMINI_API_KEY;
+  const apiKey = process.env.GEMINI_API_KEY || process.env.gemini_api_key;
   if (!apiKey) {
     const error = new Error("Missing GEMINI_API_KEY");
     error.statusCode = 503;
