@@ -2196,30 +2196,6 @@
       const form = document.getElementById("assistantForm");
       const input = document.getElementById("assistantInput");
       const messages = document.getElementById("assistantMessages");
-      const outOfScopeAnswer = "這不在我能回答的範圍內。請問還有什麼想要諮詢的嗎？";
-
-      const answers = [
-        {
-          keys: ["企劃", "活動", "標案", "政府", "kpi", "接待", "accupass"],
-          text: "具備企劃書撰寫、活動規劃、KPI 追蹤、對外協調、成果報告與核銷資料整理能力。曾執行桃園安東青創基地政府計畫，成果包含 Accupass 追蹤成長 1,690%、累計服務 10,000+ 人次與 95%+ 滿意度。"
-        },
-        {
-          keys: ["自動化", "ai", "n8n", "workflow", "流程", "效率", "sop"],
-          text: "具備實務流程優化與 AI 自動化導入經驗：自建 4 套 n8n 工作流，整合 Claude / OpenAI / Gemini API、HTTP Request、Webhook 與 Google 服務，包含社群分析週報、資料整理、Telegram AI Agent 與文件輔助流程。"
-        },
-        {
-          keys: ["網站", "wecosplay", "產品", "全端", "api", "pm", "專案經理", "軟體"],
-          text: "具備產品需求拆解、頁面流程規劃、功能驗收與開發協作能力。WeCosplay 以 AI 協作完成 Next.js / TypeScript / MongoDB / Vercel 全端平台展示，作品包含 90+ API、13 個後台管理模組、3 語系與 CI/CD 部署概念。"
-        },
-        {
-          keys: ["溝通", "協調", "跨部門", "合作", "廠商"],
-          text: "具備政府專案、活動現場與基地營運溝通協調經驗，可對接主管機關、合作單位、講師、新創團隊、參訪團體與現場人員。適合需要需求整理、時程推進與成果追蹤的企劃或產品專案角色。"
-        },
-        {
-          keys: ["聯絡", "email", "信箱", "面試"],
-          text: "可以直接透過頁面下方的聯絡區寄信給陳勇學，信箱是 d3332565@gmail.com。若是面試情境，建議優先詢問活動企劃、AI 流程優化與 WeCosplay 產品協作三個主題。"
-        }
-      ];
 
       function addMessage(role, text) {
         const bubble = document.createElement("div");
@@ -2228,13 +2204,6 @@
         messages.appendChild(bubble);
         messages.scrollTop = messages.scrollHeight;
         return bubble;
-      }
-
-      function pickAnswer(question) {
-        const normalized = question.trim().toLowerCase();
-        const hit = answers.find((item) => item.keys.some((key) => normalized.includes(key.toLowerCase())));
-        if (hit) return hit.text;
-        return outOfScopeAnswer;
       }
 
       function cleanAssistantAnswer(text) {
@@ -2254,7 +2223,7 @@
         if (!response.ok) throw new Error("Assistant API unavailable");
 
         const data = await response.json();
-        return cleanAssistantAnswer(data.answer || pickAnswer(question));
+        return cleanAssistantAnswer(data.answer || "AI 回覆產生不完整，請再輸入一次問題。");
       }
 
       function openAssistant() {
@@ -2282,7 +2251,7 @@
         try {
           pending.textContent = await requestAssistantAnswer(value);
         } catch {
-          pending.textContent = cleanAssistantAnswer(pickAnswer(value));
+          pending.textContent = "AI 回覆服務暫時無法使用，請稍後再試。";
         }
 
         messages.scrollTop = messages.scrollHeight;

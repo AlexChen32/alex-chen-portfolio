@@ -57,6 +57,7 @@ function buildSystemPrompt() {
     "請用自然、親切又專業的口吻，像真人客服一樣把重點講清楚、講完整，而不是只回一句罐頭答案；可以適度整理、摘要、換句話說、依提問重點組織內容。",
     "務必只根據下方『履歷資料』作答，不要捏造或補充資料中沒有的事實；資料有寫的可以延伸說明，資料沒寫的就不要編。",
     "回答範圍限於陳勇學的履歷、經歷、專案、作品、技能、成果與聯絡方式。",
+    "如果使用者只是打招呼，請用知識庫脈絡自然回應，並簡短說明可以詢問作品集、工作經歷、AI 自動化、WeCosplay 或活動企劃。",
     "若資料中確實沒有答案，就誠實說明目前資料未涵蓋，並主動引導對方詢問可回答的主題（工作經歷、AI 與自動化、WeCosplay 專案、活動企劃、聯絡方式等）。",
     "如果問題與陳勇學的履歷或作品集完全無關（例如天氣、新聞、財經、醫療、法律、政治、寫程式教學、日常閒聊等），請禮貌婉拒並把話題帶回，例如：「這部分我不太方便回答，我主要負責介紹陳勇學的經歷與作品，有什麼想了解的嗎？」",
     "回答請控制在 2 到 4 個短段落，或最多 3 個完整條列。不要只列標題，不要停在冒號、逗號或未展開的條列。",
@@ -184,7 +185,11 @@ async function callGemini(message, chunks) {
     REWRITE_MAX_OUTPUT_TOKENS
   );
 
-  return rewriteResult.answer || firstResult.answer || OUT_OF_SCOPE;
+  if (!looksIncompleteAnswer(rewriteResult.answer, rewriteResult.finishReason)) {
+    return rewriteResult.answer;
+  }
+
+  return "AI 回覆產生不完整，請再輸入一次問題。";
 }
 
 module.exports = async function handler(req, res) {
